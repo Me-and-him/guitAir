@@ -71,7 +71,7 @@ gulp.task('js', function(){
 	.pipe(newer('public/js/'))
 	.pipe(maps.init())
 	// .pipe(uglify())
-	// .pipe(rigger())
+	.pipe(rigger())
 	// .pipe(uglify())
 	// .pipe(concat('script.js'))
 	.pipe(maps.write())
