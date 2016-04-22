@@ -1,0 +1,22 @@
+{
+  "name": "guitAir",
+  "description": "Air guitair",
+  "main": "index.js",
+  "authors": [
+    "NguitAir team"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "fabric.js": "fabric#^1.6.0",
+    "normalize-strings": "normalize#^1.0.4",
+    "normalize-css": "^4.1.1"
+  }
+}

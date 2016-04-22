@@ -1,0 +1,672 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"font-s",
+				"font-size: "
+			],
+			[
+				"font",
+				"font-weight: "
+			],
+			[
+				"box",
+				"box-shadow: "
+			],
+			[
+				"over",
+				"overflow-x: "
+			],
+			[
+				"border",
+				"border-box"
+			],
+			[
+				"min",
+				"min-width: "
+			],
+			[
+				"box-",
+				"box-shadow"
+			],
+			[
+				"bor",
+				"border-left: "
+			],
+			[
+				"back",
+				"background-image: "
+			],
+			[
+				"text",
+				"text-align: "
+			],
+			[
+				"tran",
+				"transition: "
+			],
+			[
+				"margin",
+				"margin-right: "
+			],
+			[
+				"mx-",
+				"max-width: "
+			],
+			[
+				"block",
+				"block"
+			],
+			[
+				"a",
+				"align-content: "
+			],
+			[
+				"in",
+				"inline-block"
+			],
+			[
+				"inli",
+				"inline-block"
+			],
+			[
+				"max-",
+				"max-width: "
+			],
+			[
+				"max",
+				"max-width: "
+			],
+			[
+				"flex",
+				"flex-basis"
+			],
+			[
+				"pad",
+				"padding"
+			],
+			[
+				"c",
+				"cursor"
+			],
+			[
+				"tra",
+				"transparentize"
+			],
+			[
+				"dar",
+				"dark"
+			],
+			[
+				"dark",
+				"dark-gray"
+			],
+			[
+				"skill",
+				"skill-section"
+			],
+			[
+				"gulp",
+				"gulpif"
+			],
+			[
+				"al",
+				"aleksandrac"
+			],
+			[
+				"light",
+				"light-gray"
+			],
+			[
+				"lig",
+				"light-gray"
+			],
+			[
+				"background",
+				"background-size"
+			],
+			[
+				"align",
+				"align-items"
+			],
+			[
+				"transpa",
+				"transparentize"
+			],
+			[
+				"backg",
+				"background-size"
+			],
+			[
+				"head_",
+				"head__bg"
+			],
+			[
+				"head__",
+				"head__big-info"
+			],
+			[
+				"th",
+				"th_path"
+			],
+			[
+				"marg",
+				"margin-bottom"
+			],
+			[
+				"bloc",
+				"inline-block"
+			],
+			[
+				"border-co",
+				"border-color"
+			],
+			[
+				"co",
+				"countdown"
+			],
+			[
+				"main",
+				"main__block"
+			],
+			[
+				"di",
+				"display"
+			],
+			[
+				"font-",
+				"font-size"
+			],
+			[
+				"after",
+				"after-nav__contacts"
+			],
+			[
+				"gray",
+				"gray-blue"
+			],
+			[
+				"flex-",
+				"flex-flow"
+			],
+			[
+				"Tra",
+				"translateY"
+			],
+			[
+				"op",
+				"opacity"
+			],
+			[
+				"scale",
+				"scaleY"
+			],
+			[
+				"scal",
+				"scaleY"
+			],
+			[
+				"art__",
+				"art__head-info"
+			],
+			[
+				"no",
+				"none"
+			],
+			[
+				"col",
+				"column"
+			],
+			[
+				"art",
+				"art__head"
+			],
+			[
+				"trans",
+				"transparent"
+			],
+			[
+				"fle",
+				"flex-flow"
+			],
+			[
+				"inline",
+				"inline-block"
+			],
+			[
+				"side-nav__",
+				"side-nav__selected-bg-cl"
+			],
+			[
+				"pos",
+				"position"
+			],
+			[
+				"z",
+				"z-index"
+			],
+			[
+				"wid",
+				"width"
+			],
+			[
+				"tex",
+				"text-transform"
+			],
+			[
+				"inl",
+				"inline-block"
+			],
+			[
+				"hover",
+				"hover-link"
+			],
+			[
+				"word",
+				"word-wrap"
+			],
+			[
+				"side-nav",
+				"side-nav--icon"
+			],
+			[
+				"mod",
+				"module._resolveFilename(request, parent);"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/index.html",
+			"settings":
+			{
+				"buffer_size": 120,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "var gulp = require('gulp'),\n	concat = require('gulp-concat'),\n	prefix = require('gulp-autoprefixer'),\n	sass = require('gulp-sass'),\n	browsersync = require('browser-sync').create(),\n	rigger = require('gulp-rigger'),\n	useref = require('gulp-useref'),\n	uglify = require('gulp-uglify'),\n	minifyCss = require('gulp-minify-css'),\n	gulpif = require('gulp-if'),\n	imagemin = require('gulp-imagemin'),\n	newer = require('gulp-newer'),\n	maps = require('gulp-sourcemaps'),\n	del = require('del'),\n	debug = require('gulp-debug'),\n	flatten = require('gulp-flatten'),\n	htmlmin = require('gulp-htmlmin');\n\n\ngulp.task('fonts', ()=>{\n	return gulp.src('bower_components/**/font*/*.*(otf|ttf|woff|eot|svg|woff2)')\n	.pipe(flatten())\n	.pipe(newer('public/fonts'))\n	.pipe(debug())\n	.pipe(gulp.dest('public/fonts'))\n})\n\ngulp.task('libs', ()=>{\n	return gulp.src('bower_components/**/*')\n	// .pipe(newer('src/libs/'))\n	.pipe(gulp.dest('src/libs/'))\n	.pipe(gulp.dest('public/libs/'))\n})\n\ngulp.task('images', ()=>{\n	return gulp.src('src/img/**/*')\n		.pipe(newer('public/img/'))\n		.pipe(imagemin({\n			optimizationLevel: 5,\n			progressive: true\n		}))\n		.pipe(gulp.dest('public/img/'))\n})\n\ngulp.task('html', ()=>{\n	return gulp.src('src/*.*(html|php)')\n		// .pipe(newer('./'))\n		// .pipe(gulpif('*.*(json|xml)', gulp.dest('public/')))\n		.pipe(maps.init({loadMaps: true}))\n		.pipe(rigger())\n		.pipe(useref())\n		.pipe(gulpif('*.js', uglify()))\n		.pipe(gulpif('*.css', minifyCss()))\n		// .pipe(htmlmin({collapseWhitespace: true}))\n		.pipe(maps.write())\n		.pipe(gulp.dest('./'))\n		.pipe(gulp.dest('./public'))\n})\n\ngulp.task('sass', ()=>{\n	return gulp.src('src/sass/main.sass')\n		.pipe(maps.init())\n		.pipe(sass().on('error', sass.logError))\n		.pipe(prefix({\n			browsers: ['last 5 versions', '> 1%']\n		}))\n		.pipe(minifyCss())\n		.pipe(maps.write())\n		.pipe(gulp.dest('public/css/'))\n		// .pipe(gulp.dest('src/css/'))\n})\n\ngulp.task('js', ()=>{\n	return gulp.src('src/js/*.js')\n	// .pipe(newer('public/js/'))\n	.pipe(debug())\n	.pipe(maps.init())\n	.pipe(rigger())\n	.pipe(concat('complete.js'))\n	.pipe(uglify())\n	.pipe(maps.write())\n	.pipe(gulp.dest('public/js'))\n})\n\ngulp.task('clean', ()=>{\n	return del('public/*')\n})\n\n\ngulp.task('watch', ()=>{\n	gulp.watch('bower_components/**/*', gulp.series('libs'))\n	gulp.watch('src/**/*.htm*', gulp.series('html'))\n	gulp.watch('src/sass/*.sass', gulp.series('sass'))\n	gulp.watch('src/**/*.js', gulp.series('js'))\n})\n\ngulp.task('serve', ()=>{\n	browsersync.init({\n		server: './',\n	})\n\n	browsersync.watch('public/**/*').on('change', browsersync.reload)\n})\n\ngulp.task('default', gulp.series('libs', 'fonts', 'js', 'sass', 'images', 'html', gulp.parallel('watch', 'serve')))\n\ngulp.task('compile', gulp.series('clean', 'images', 'libs', 'fonts', 'js', 'sass', 'html'))",
+			"settings":
+			{
+				"buffer_size": 2757,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 390.0,
+		"last_filter": "Package Control: ",
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control:",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 467.0
+	},
+	"console":
+	{
+		"height": 146.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/nikita/dev/prod.dev/guitAir",
+		"/home/nikita/dev/prod.dev/guitAir/src"
+	],
+	"file_history":
+	[
+		"/home/nikita/dev/prod.dev/guitAir/index.html",
+		"/home/nikita/dev/test.dev/ya-task-1/public/css/main.css",
+		"/home/nikita/dev/test.dev/ya-task-1/.gitignore",
+		"/home/nikita/dev/test.dev/ya-task-1/index.html",
+		"/home/nikita/dev/prod.dev/c-nik/app/sass/_head-section.sass",
+		"/home/nikita/dev/prod.dev/c-nik/app/sass/main.sass",
+		"/home/nikita/dev/prod.dev/c-nik/dist/css/main.css",
+		"/home/nikita/dev/prod.dev/c-nik/app/libs/iphone5s.css",
+		"/home/nikita/dev/prod.dev/c-nik/app/sass/style.sass",
+		"/home/nikita/dev/prod.dev/c-nik/app/sass/portfolio-section.sass",
+		"/home/nikita/dev/prod.dev/c-nik/app/sass/qoute-section.sass",
+		"/home/nikita/dev/prod.dev/c-nik/app/sass/head-section.sass",
+		"/home/nikita/dev/prod.dev/c-nik/app/libs/fake-browser.css",
+		"/home/nikita/dev/prod.dev/c-nik/app/sass/general.sass",
+		"/home/nikita/dev/prod.dev/c-nik/app/sass/additional.sass",
+		"/home/nikita/dev/prod.dev/c-nik/app/sass/animations.sass",
+		"/home/nikita/dev/prod.dev/c-nik/app/fonts/glober-bold/stylesheet.css",
+		"/home/nikita/dev/prod.dev/c-nik/app/sass/mixins.scss",
+		"/home/nikita/dev/prod.dev/c-nik/app/sass/resp.sass",
+		"/home/nikita/dev/prod.dev/c-nik/app/sass/vars.sass",
+		"/home/nikita/dev/prod.dev/c-nik/gulpfile.js",
+		"/home/nikita/dev/prod.dev/c-nik/app/js/script.js",
+		"/home/nikita/dev/prod.dev/c-nik/app/css/style.css",
+		"/home/nikita/dev/prod.dev/c-nik/app/index.html",
+		"/home/nikita/dev/prod.dev/c-nik/app/browserconfig.xml",
+		"/home/nikita/dev/prod.dev/c-nik/app/fonts/jura/style.css",
+		"/home/nikita/dev/prod.dev/c-nik/app/fonts/glober-thin/stylesheet.css",
+		"/home/nikita/dev/prod.dev/c-nik/app/req.json",
+		"/home/nikita/dev/prod.dev/c-nik/app/fonts/ropa-soft/MyFontsWebfontsKit.css",
+		"/home/nikita/dev/prod.dev/c-nik/app/fonts/ropasoftpro/stylesheet.css",
+		"/home/nikita/dev/prod.dev/c-nik/app/fonts/ropa-soft-2/MyFontsWebfontsKit.css",
+		"/home/nikita/dev/prod.dev/c-nik/app/fonts/ropa-soft/style.css",
+		"/home/nikita/dev/prod.dev/c-nik/app/fonts/Bavro/stylesheet.css",
+		"/var/www/html/persona.dev/index.htm",
+		"/var/www/html/persona.dev/sass/comps/price.sass",
+		"/var/www/html/iivt.dev/wp-content/themes/iivt/sass/fonts.scss",
+		"/var/www/html/iivt.dev/wp-content/themes/iivt/css/complete-style.css",
+		"/media/data/Web/Projects/fanHack_countdown/style/fonts/Fira Mono/stylesheet.css",
+		"/media/data/Web/Projects/fanHack_countdown/style/style.css",
+		"/var/www/html/c-nik.dev/fonts/Nord/stylesheet.css",
+		"/var/www/html/iivt.dev/wp-content/themes/iivt/sass/fonts .scss",
+		"/var/www/html/iivt.dev/wp-content/themes/iivt/js/modules/frontend.js",
+		"/var/www/html/iivt.dev/wp-content/themes/iivt/sass/mixins.scss",
+		"/var/www/html/iivt.dev/wp-content/themes/iivt/js/components.js",
+		"/var/www/html/iivt.dev/wp-content/themes/iivt/section-header.php",
+		"/home/niikita/dev/learn_node/modules/start/app.js",
+		"/home/niikita/dev/learn_node/modules/start/server.js",
+		"/home/niikita/dev/learn_node/modules/start/user/index.js",
+		"/home/niikita/dev/learn_node/modules/start/db/ru.json",
+		"/home/niikita/dev/learn_node/modules/start/db/index.js",
+		"/home/niikita/dev/learn_node/modules/start/user/ru.json",
+		"/home/niikita/dev/learn_node/modules/start/ru.json",
+		"/home/niikita/dev/learn_node/modules/start/user.js",
+		"/home/niikita/dev/learn_node/1.js",
+		"/etc/php5/fpm/php.ini",
+		"/etc/nginx/sites-available/iivt.dev",
+		"/var/www/html/iivt.dev/index.php",
+		"/etc/nginx/sites-available/default",
+		"/usr/share/phpmyadmin/index.php",
+		"/etc/apt/sources.list",
+		"/home/niikita/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/niikita/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings"
+	],
+	"find":
+	{
+		"height": 27.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"../bower_components",
+			"chil",
+			"first",
+			"nth",
+			"today",
+			"03",
+			"strong",
+			"id",
+			"i",
+			"id",
+			"channelId",
+			"before",
+			"ima",
+			"summary",
+			"section",
+			"copy",
+			"h2",
+			"section",
+			"html",
+			"workflow",
+			"js",
+			"layout",
+			"re",
+			"css",
+			"5em",
+			"апреля",
+			"date",
+			"a ",
+			"side",
+			";",
+			"><",
+			"cons",
+			"script",
+			"seconda",
+			"youtube",
+			"max-width",
+			"anch",
+			"#regi",
+			"drop",
+			"dropd",
+			"positions",
+			"h3",
+			"px",
+			"rem",
+			"z-in",
+			"z",
+			"@",
+			"to-top",
+			"featuredIdToImageFunc",
+			"<",
+			"/Fira Sans",
+			".woff2'",
+			"'../",
+			"smMax",
+			"headShown",
+			"headSh",
+			"headHidd",
+			"navB",
+			"nav-b",
+			"serv",
+			"server",
+			"toT",
+			"scroll",
+			"fira",
+			"word"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/index.html",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 120,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 1,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2757,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								180,
+								180
+							]
+						],
+						"settings":
+						{
+							"default_dir": "/home/nikita/dev/prod.dev/guitAir",
+							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 57.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 35.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.5,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 124.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "untitled.sublime-project",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"~/dev/prod.dev/c-nik/c-nik.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 1,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 246.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
