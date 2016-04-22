@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "fabric.js": "fabric#^1.6.0",
-    "normalize-css": "^4.1.1"
+    "normalize-css": "^4.1.1",
+    "font-awesome": "^4.6.1"
   }
 }

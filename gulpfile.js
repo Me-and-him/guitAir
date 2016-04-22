@@ -68,10 +68,13 @@ gulp.task('sass', function(){
 
 gulp.task('js', function(){
 	return gulp.src('src/js/**/*.js')
-	.pipe(newer('public/js/'))
+	// .pipe(newer('public/js/'))
 	.pipe(maps.init())
 	// .pipe(uglify())
 	.pipe(rigger())
+	.pipe(babel({
+			presets: ['es2015']
+		}))
 	// .pipe(uglify())
 	// .pipe(concat('script.js'))
 	.pipe(maps.write())
@@ -100,6 +103,6 @@ gulp.task('serve', ()=>{
 	bs.watch('public/**/*').on('change', bs.reload)
 })
 
-gulp.task('default', ['libs', 'js', 'sass', 'html', 'serve', 'watch'])
+gulp.task('default', ['images', 'libs', 'js', 'sass', 'html', 'serve', 'watch'])
 
 gulp.task('compile', ['clean', 'images', 'libs', 'fonts', 'js', 'sass', 'html'])
