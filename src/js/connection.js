@@ -4,13 +4,18 @@
  * Grabs mobile-app's IP address and manages connection to the phone.
  *
  * In this document following terms should be treated as equal: mobile server,
- * mobile controller, phone, mobile app.
+ * mobile controller, phone, mobile app - and all of these mean the server running
+ * on the mobile phone that is a controller for this page.
+ *
+ * The server in this document is a server that serves as a mediator between this
+ * page and the app serving as controller for it.
  */
 
 (function() {
     // Ask server if this page was requested by code.
     var xhr = new XMLHttpRequest();
     while (true) {
+	// TODO! Edit the following reques according to protocol of the server.
 	xhr.open('GET', 'app/req', false);
 	xhr.send();
 	if (xhr.status == 200) {
@@ -53,7 +58,7 @@
     function onWSocketGotMessage(e) {
 	// Generate a new event that will be sent to event handler in the
 	// view.
-	var newEvent = new CustomEvent(e.movement, {'time': e.time});
+	var newEvent = new CustomEvent('wsevent', {detail: {movement: e.movement, time: e.time}});
     }
 
     ws.onopen = onWSocketOpen;
