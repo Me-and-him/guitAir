@@ -1,7 +1,9 @@
 'use strict';
 
-//= connection.js
+//= ../libs/howler.js/howler.min.js
+
 //= render.js
+//= connection.js
 
 
 // *** List of UI elements ***

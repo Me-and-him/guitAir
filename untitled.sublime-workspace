@@ -4,6 +4,34 @@
 		"selected_items":
 		[
 			[
+				"margin",
+				"margin-top: "
+			],
+			[
+				"trans",
+				"transform: "
+			],
+			[
+				"border",
+				"border-radius: "
+			],
+			[
+				"pad",
+				"padding: "
+			],
+			[
+				"a",
+				"animation: "
+			],
+			[
+				"back",
+				"background-color: "
+			],
+			[
+				"text",
+				"text-shadow: "
+			],
+			[
 				"tra",
 				"transform: "
 			],
@@ -14,10 +42,6 @@
 			[
 				"over",
 				"overflow: "
-			],
-			[
-				"back",
-				"background-position: "
 			],
 			[
 				"body",
@@ -36,10 +60,6 @@
 				"box-shadow: "
 			],
 			[
-				"border",
-				"border-box"
-			],
-			[
 				"min",
 				"min-width: "
 			],
@@ -52,16 +72,8 @@
 				"border-left: "
 			],
 			[
-				"text",
-				"text-align: "
-			],
-			[
 				"tran",
 				"transition: "
-			],
-			[
-				"margin",
-				"margin-right: "
 			],
 			[
 				"mx-",
@@ -70,10 +82,6 @@
 			[
 				"block",
 				"block"
-			],
-			[
-				"a",
-				"align-content: "
 			],
 			[
 				"in",
@@ -90,10 +98,6 @@
 			[
 				"flex",
 				"flex-basis"
-			],
-			[
-				"pad",
-				"padding"
 			],
 			[
 				"c",
@@ -228,10 +232,6 @@
 				"art__head"
 			],
 			[
-				"trans",
-				"transparent"
-			],
-			[
 				"fle",
 				"flex-flow"
 			],
@@ -287,7 +287,7 @@
 			"file": "src/index.html",
 			"settings":
 			{
-				"buffer_size": 535,
+				"buffer_size": 1103,
 				"line_ending": "Unix"
 			}
 		},
@@ -295,7 +295,7 @@
 			"file": "src/js/render.js",
 			"settings":
 			{
-				"buffer_size": 512,
+				"buffer_size": 815,
 				"line_ending": "Unix",
 				"name": "// Рисуем"
 			}
@@ -304,7 +304,15 @@
 			"file": "src/js/index.js",
 			"settings":
 			{
-				"buffer_size": 124,
+				"buffer_size": 151,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/js/connection.js",
+			"settings":
+			{
+				"buffer_size": 2682,
 				"line_ending": "Unix"
 			}
 		},
@@ -317,19 +325,53 @@
 			}
 		},
 		{
+			"file": "src/sass/_animations.sass",
+			"settings":
+			{
+				"buffer_size": 82,
+				"line_ending": "Unix",
+				"name": "@keyframes starRotate"
+			}
+		},
+		{
+			"file": "src/sass/_general.sass",
+			"settings":
+			{
+				"buffer_size": 104,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "src/sass/main.sass",
 			"settings":
 			{
-				"buffer_size": 622,
+				"buffer_size": 1918,
 				"line_ending": "Unix",
 				"name": "@import '../libs/normalize-css/normalize.css'"
+			}
+		},
+		{
+			"file": "src/sass/_volume-input.sass",
+			"settings":
+			{
+				"buffer_size": 1370,
+				"line_ending": "Unix",
+				"name": ".volume-support"
+			}
+		},
+		{
+			"file": "src/sass/_vars.sass",
+			"settings":
+			{
+				"buffer_size": 16,
+				"line_ending": "Unix"
 			}
 		},
 		{
 			"file": "gulpfile.js",
 			"settings":
 			{
-				"buffer_size": 2761,
+				"buffer_size": 2826,
 				"line_ending": "Unix"
 			}
 		}
@@ -377,7 +419,8 @@
 	[
 		"/home/nikita/dev/prod.dev/guitAir",
 		"/home/nikita/dev/prod.dev/guitAir/public",
-		"/home/nikita/dev/prod.dev/guitAir/src"
+		"/home/nikita/dev/prod.dev/guitAir/src",
+		"/home/nikita/dev/prod.dev/guitAir/src/js"
 	],
 	"file_history":
 	[
@@ -448,7 +491,7 @@
 	],
 	"find":
 	{
-		"height": 27.0
+		"height": 38.0
 	},
 	"find_in_files":
 	{
@@ -462,6 +505,17 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"8.4px",
+			"16px",
+			"support",
+			"}",
+			"{",
+			";",
+			"input[type=range]",
+			"255",
+			"2",
+			"object",
+			"canv",
 			"body",
 			"width",
 			"app",
@@ -548,7 +602,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -557,49 +611,22 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 535,
+						"buffer_size": 1103,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								470,
-								470
+								384,
+								384
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/HTML/HTML.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/js/render.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 512,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								231,
-								231
-							]
-						],
-						"settings":
-						{
-							"auto_name": "// Рисуем",
-							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage"
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -609,25 +636,56 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "src/js/index.js",
+					"buffer": 1,
+					"file": "src/js/render.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 124,
+						"buffer_size": 815,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13,
-								13
+								317,
+								317
+							]
+						],
+						"settings":
+						{
+							"auto_name": "// Рисуем",
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
+							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/js/index.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 151,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								29,
+								29
 							]
 						],
 						"settings":
 						{
 							"auto_name": "",
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
 							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage"
 						},
 						"translation.x": 0.0,
@@ -639,6 +697,37 @@
 				},
 				{
 					"buffer": 3,
+					"file": "src/js/connection.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2682,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								819,
+								819
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
+							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 338.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": ".gitignore",
 					"semi_transient": false,
 					"settings":
@@ -656,77 +745,201 @@
 						],
 						"settings":
 						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 10,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 0,
+			"selected": 5,
 			"sheets":
 			[
 				{
-					"buffer": 4,
-					"file": "src/sass/main.sass",
+					"buffer": 5,
+					"file": "src/sass/_animations.sass",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 622,
+						"buffer_size": 82,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								282,
-								282
+								82,
+								82
 							]
 						],
 						"settings":
 						{
-							"auto_name": "@import '../libs/normalize-css/normalize.css'",
+							"auto_name": "@keyframes starRotate",
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
 							"syntax": "Packages/Syntax Highlighting for Sass/Syntaxes/Sass.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "gulpfile.js",
+					"buffer": 6,
+					"file": "src/sass/_general.sass",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2761,
+						"buffer_size": 104,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2761,
-								2761
+								104,
+								104
 							]
 						],
 						"settings":
 						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
+							"syntax": "Packages/Syntax Highlighting for Sass/Syntaxes/Sass.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/sass/main.sass",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1918,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1616,
+								1616
+							]
+						],
+						"settings":
+						{
+							"auto_name": "@import '../libs/normalize-css/normalize.css'",
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
+							"syntax": "Packages/Syntax Highlighting for Sass/Syntaxes/Sass.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1584.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/sass/_volume-input.sass",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1370,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								597,
+								597
+							]
+						],
+						"settings":
+						{
+							"auto_name": ".volume-support",
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
+							"syntax": "Packages/Syntax Highlighting for Sass/Syntaxes/Sass.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 346.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "src/sass/_vars.sass",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 16,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								16,
+								16
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
+							"syntax": "Packages/Syntax Highlighting for Sass/Syntaxes/Sass.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "gulpfile.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2826,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2080,
+								2080
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
 							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2014.0,
+						"translation.y": 1452.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
@@ -734,7 +947,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 27.0
+		"height": 30.0
 	},
 	"input":
 	{
@@ -782,7 +995,7 @@
 	"project": "untitled.sublime-project",
 	"replace":
 	{
-		"height": 50.0
+		"height": 56.0
 	},
 	"save_all_on_build": true,
 	"select_file":

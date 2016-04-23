@@ -43,6 +43,8 @@ gulp.task('images', function(){
 		.pipe(gulp.dest('public/img/'));
 })
 
+// gulp.task('audio', func)
+
 gulp.task('html', function(){
 	return gulp.src('src/**/*.*(html|json|xml|php|txt)')
 		.pipe(newer('public/'))
