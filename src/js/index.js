@@ -1,4 +1,6 @@
 'use strict';
+
+//= index.js
 //= render.js
 
 

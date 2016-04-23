@@ -7,11 +7,11 @@
 @import 'general'
 
 .logo
-	font-size: 12px
+	font-size: 0.667em
 	position: absolute
 	width: 15.375em
 	height: 5em
-	top: 2em
+	top: 2.25em
 	left: calc(50% - 7.6875em)
 	z-index: 9999
 	// opacity: 0.9
@@ -28,6 +28,21 @@
 		top: -0.1em
 		right: 17.9%
 		animation: starRotate 1.8s linear infinite
+
+.score
+	position: absolute
+	padding: 0.7em
+	top: 1.5em
+	left: 1.5em
+	color: #fff
+	background: rgba(0,0,0,.5)
+	border-radius: 0.3em
+
+	span
+		font-size: 1.2em
+
+		.fa-star-o
+			padding-right: 0.3em
 
 #game
 	// width: 100%

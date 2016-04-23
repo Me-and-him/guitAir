@@ -1,7 +1,7 @@
 var gulp = require('gulp'),
 	concat = require('gulp-concat'),
 	prefix = require('gulp-autoprefixer'),
-	sass = require('gulp-ruby-sass'),
+	sass = require('gulp-sass'),
 	connect = require('gulp-connect'),
 	opn = require('opn'),
 	useref = require('gulp-useref'),
@@ -56,8 +56,10 @@ gulp.task('html', function(){
 })
 
 gulp.task('sass', function(){
-	return sass('src/sass/main.sass', {sourcemap: true})
-		.on('error', sass.logError)
+	return gulp.src('src/sass/main.sass')
+		// sass('src/sass/main.sass', {sourcemap: true})
+		.pipe(maps.init())
+		.pipe(sass().on('error', sass.logError))
 		.pipe(prefix({
 			browsers: ['last 5 versions', '> 1%']
 		}))
@@ -71,7 +73,7 @@ gulp.task('js', function(){
 	// .pipe(newer('public/js/'))
 	.pipe(maps.init())
 	// .pipe(uglify())
-	.pipe(rigger())
+	// .pipe(rigger())
 	.pipe(babel({
 			presets: ['es2015']
 		}))

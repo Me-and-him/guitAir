@@ -26,7 +26,7 @@
     "gulp-remember": "^0.3.0",
     "gulp-rigger": "^0.5.8",
     "gulp-ruby-sass": "^2.0.6",
-    "gulp-sass": "^2.2.0",
+    "gulp-sass": "^2.3.1",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.3",
     "gulp-useref": "^3.0.8",
