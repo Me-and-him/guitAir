@@ -11,43 +11,47 @@
 
 (function() {
     // Set the connection to the mobile app.
-    var host = "ws://" + response.ip + "/";
-    var ws = new WebSocket(host);
+    var host = "ws://" + window.location.hostname + "/";
+    //var ws = new WebSocket(host);
     var songWasStarted = false;
+    var ws = io();
 
     function onOpen() {
 	// After we connect, the server sends us data which will be handled in
 	// ``onmessage`` so we do nothing here.
     }
 
-    function onClose(event) {
-	if (!e.wasClean) {
-	    // Retry if connection failed.
-	    ws = new WebSocket(host);
-	    ws.onopen = onOpen;
-	    ws.onclose = onClose;
-	    if (!songWasStarted) {
-		ws.onmessage = onGotMessageOnStart;
-	    } else {
-		ws.onmessage = onGotMessageOnConnectionEstablished;
-	    }
-	}
-	songWasStarted = false;
-    }
+    // function onClose(event) {
+    // 	if (!e.wasClean) {
+    // 	    // Retry if connection failed.
+    // 	    ws = new WebSocket(host);
+    // 	    ws.onopen = onOpen;
+    // 	    ws.onclose = onClose;
+    // 	    if (!songWasStarted) {
+    // 		ws.onmessage = onGotMessageOnStart;
+    // 	    } else {
+    // 		ws.onmessage = onGotMessageOnConnectionEstablished;
+    // 	    }
+    // 	}
+    // 	songWasStarted = false;
+    // }
 
     function onGotMessageOnStart(event) {
 	// Receive song name and command sequence.
+	// TODO! Generate a movement string list from the supplied code.
 	var newEvent = new CustomEvent(
 	    'agSetupEvent',
-	    {detail: {song: event.song, commands: event.commands}}
+	    {detail: {song: event.song, bpm: event.bpm, commands: event.commands}}
 	);
 	document.dispatchEvent(newEvent);
-	ws.onmessage = onGotMessageOnConnectionEstablished;
+	//ws.onmessage = onGotMessageOnConnectionEstablished;
+	ws.on('message', onGotMessageOnConnectionEstablished);
 	songWasStarted = true;
     }
 
     function onGotMessageOnConnectionEstablished(event) {
 	// Receive user command.
+	// TODO! Generate a movement string from the supplied code.
 	var newEvent = new CustomEvent(
 	    'agComandEvent',
 	    {detail: {movement: event.movement, time: event.time}}
@@ -55,7 +59,8 @@
 	document.dispatchEvent(newEvent);
     }
 
-    ws.onopen = onOpen;
-    ws.onclose = onClose;
-    ws.onmessage = onGotMessageOnStart;
+    io.on('message', onGotMessageOnStart);
+    // ws.onopen = onOpen;
+    // ws.onclose = onClose;
+    // ws.onmessage = onGotMessageOnStart;
 })();
