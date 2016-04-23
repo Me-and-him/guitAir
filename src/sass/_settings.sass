@@ -1,0 +1,81 @@
+.settings-section
+	position: absolute
+	top: 1.5em
+	right: 1.5em
+	height: 3.15em
+	// width: 3.15em
+	padding: 0.1em
+	// line-height: 1.8em
+	text-shadow: 0 0.2em rgba(0,0,0,.5)		
+	
+	.settings-btn, .volume-input-wr
+		background: transparent
+		display: inline-block
+		margin-left: 1em
+		border: none
+		border-radius: 50%
+		color: #fff
+		opacity: 0.8
+		// border: 2px solid #fff
+		transition: all 0.08s ease-in-out
+		&:hover
+			color: $yellow
+			opacity: 1
+			text-shadow: 0 0 0.7em rgba(0,0,0,.5)
+			cursor: pointer
+		&:active, &:focus
+			outline: none
+		&:active
+			transform: scale(1)
+			color: darken($yellow, 20%)
+
+		.fa
+			font-size: 2.7em
+	
+	.volume-settings
+		display: inline-block
+		&:hover
+			.volume-input-wr
+				display: block
+				opacity: 0.8
+				visibility: visible
+
+	.volume-btn
+		width: 3em
+		text-align: left
+		&:hover
+			transform: scale(1.1)
+		&:active
+			transform: scale(1)
+
+	.volume-input-wr
+		box-sizing: border-box
+		// height: 100%
+		font-size: 0.8em
+		// width: 10em
+		padding: 1em 1.4em
+		left: -3.5em
+		top: 8.3em
+		opacity: 0
+		display: block
+		visibility: hidden
+		position: absolute
+		// vertical-align: top
+		transform: rotate(-90deg)
+		transition: all 0.2s ease-in
+		background: rgba(0,0,0,.5)
+		border-radius: 0.2em
+		overflow: hidden
+		&:hover, &:active, &:focus
+			transform: rotate(-90deg)
+			visibility: visible
+			opacity: 0.8
+		.volume-input
+			margin-top: -0.7em
+			background-color: transparent
+
+	.gear-btn		
+		&:hover
+			transform: scale(1.1) rotate(30deg)
+		&:active
+			transform: scale(1)
