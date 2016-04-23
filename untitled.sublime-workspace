@@ -4,12 +4,52 @@
 		"selected_items":
 		[
 			[
-				"margin",
-				"margin-top: "
+				"computed",
+				"computedStyle"
+			],
+			[
+				"animate",
+				"animateMovement"
+			],
+			[
+				"canvas",
+				"canvasObject"
+			],
+			[
+				"strokeWi",
+				"strokeWidth"
+			],
+			[
+				"strokeWidth",
+				"strokeWidthPercent"
+			],
+			[
+				"tran",
+				"transform: "
+			],
+			[
+				"text",
+				"text-align: "
+			],
+			[
+				"fa-volume",
+				"fa-volume-off"
+			],
+			[
+				"box",
+				"box-sizing: "
 			],
 			[
 				"trans",
 				"transform: "
+			],
+			[
+				"volume",
+				"volume-input-wr"
+			],
+			[
+				"margin",
+				"margin-top: "
 			],
 			[
 				"border",
@@ -26,10 +66,6 @@
 			[
 				"back",
 				"background-color: "
-			],
-			[
-				"text",
-				"text-shadow: "
 			],
 			[
 				"tra",
@@ -56,10 +92,6 @@
 				"font-weight: "
 			],
 			[
-				"box",
-				"box-shadow: "
-			],
-			[
 				"min",
 				"min-width: "
 			],
@@ -70,10 +102,6 @@
 			[
 				"bor",
 				"border-left: "
-			],
-			[
-				"tran",
-				"transition: "
 			],
 			[
 				"mx-",
@@ -287,15 +315,18 @@
 			"file": "src/index.html",
 			"settings":
 			{
-				"buffer_size": 1103,
+				"buffer_size": 1188,
 				"line_ending": "Unix"
 			}
 		},
 		{
+			"contents": ";\n(function(){\n\nfunction animate(draw, duration) {\n  var start = performance.now();\n\n  requestAnimationFrame(function animate(time) {\n    // определить, сколько прошло времени с начала анимации\n    var timePassed = time - start;\n\n    // возможно небольшое превышение времени, в этом случае зафиксировать конец\n    if (timePassed > duration) timePassed = duration;\n\n    // нарисовать состояние анимации в момент timePassed\n    draw(timePassed);\n\n    // если время анимации не закончилось - запланировать ещё кадр\n    if (timePassed < duration) {\n      requestAnimationFrame(animate);\n    }\n\n  });\n}\n\n\nvar config = {\n	colors: {\n		neutral: '#FFA700', // #8D99AE #107E7D\n		success: '#C2E812',\n		fail: '#B80C09'\n	},\n	movements: {\n		radiusPercent: 4,\n		strokeWidthPercent: 0.5\n	}\n}\n\n\n// **********\n// * CANVAS *\n// **********\n\n// Changes canvas background size when fired\nfunction refreshComputedSizes(object) {\n	\n	config.canvOpts.computedStyle = {\n		width: +object.width.slice(0,-2),\n		height: +object.height.slice(0,-2)\n	};\n\n	canvas.setDimensions({\n		width: config.canvOpts.computedStyle.width,\n		height: config.canvOpts.computedStyle.height\n	});\n\n}\n\nfunction addMovementOnCanvas(movementInfo) {\n\n	var radius = config.canvOpts.movements.radius;\n	var strokeWidth = config.canvOpts.movements.strokeWidth;\n	// var x = Math.round(config.canvOpts.computedStyle.width - (config.canvOpts.computedStyle.width/100)*3) - radius*2;\n	var x = Math.round(config.canvOpts.computedStyle.width);\n	var y = Math.round(config.oneHPercent * 45);\n\n	// console.log(x + ' - ' + y);\n\n	var movement = new fabric.Circle({\n		fill: movementInfo.color,\n		stroke: '#FFFFFF',\n		strokeWidth: strokeWidth,\n		radius: radius,\n		// radius: 100,\n		top: y,\n		left: x\n		// left: 262\n	});\n\n	movementInfo.canvasObject = movement\n\n	console.log(movement);\n	canvas.add(movement);\n	canvas.renderAll();\n	// movementInfo.state = 'added';\n}\n\n\n// Actions performed when current game settings recieved\nfunction onAgSetupEvent(event) {\n\n	let audioFileURL = 'http://' + window.location.hostname + '/songs/' + event.detail.song;\n	// let audioFileURL = '../audio/' + event.detail.song;\n\n	// console.log(audioFileURL);\n\n	config.currentAudio = new Howl({\n		urls: [audioFileURL],\n		autoplay: false,\n		volume: 0.8,\n	});\n\n	config.currentMovements = event.detail.commands.map((currentValue, index, array) => {\n			return {\n				index: index,\n				name: currentValue,\n				color: config.colors.neutral,\n			}\n	});\n\n	// BPM, minInterval, beginning offset\n	// config.currentBpm = event.detail.bpm;\n	config.currentBpm = 128;\n	config.currentMinInterval = (config.currentBpm * 1000) / (60 * 16);\n	config.currentBeginningOffset = event.detail.offset;\n\n	// Test\n	// addMovementOnCanvas(config.currentMovements[1]);\n	start();\n\n}\n\nfunction start() {\n	config.currentScore = 0;\n	config.currentStartDate = Date.now();\n	setTimeout(function(){\n		nextBeat(true);\n	}, config.currentBeginningOffset);\n	config.currentAudio.start();\n}\n\nfunction nextBeat(isFirst) {\n\n	// If we're in the beginning of song\n	if (isFirst === true) {\n		addMovementOnCanvas(config.currentMovements[0]);\n		animateMovement(config.currentMovements[0]);\n	}\n\n	// Insert new movement\n	var appearingMovementIndex = (config.currentStartDate - Date.now()) / config.currentMinInterval;\n	var appearingMovement = config.currentMovements[appearingMovementIndex];\n\n	addMovementOnCanvas(appearingMovement);\n	animateMovement(appearingMovement);\n\n}\n\nfunction animateMovement(movementInfo) {\n	movementInfo.canvasObject.animate('left', ''+(config.oneWPercent * 20), {\n		onChange: canvas.renderAll.bind(canvas),\n		duration: config.currentMinInterval*16\n	})\n\n	animate(function(time){\n		movementInfo.canvasObject.left = config.oneWPercent * \n	}, config.currentMinInterval*16)\n}\n\n\n// Mutes / unmutes audio\nfunction onVolumeBtnClick(event) {\n\n	if (!config.currentAudio.muted) {\n\n		// Change view\n		this.childNodes[1].classList.remove('fa-volume-up');\n		this.childNodes[1].classList.add('fa-volume-off');\n\n		// Mute\n		config.currentAudio.mute();\n		config.currentAudio.muted = true;\n	} else {\n\n		// Change view\n		this.childNodes[1].classList.remove('fa-volume-off');\n		this.childNodes[1].classList.add('fa-volume-up');\n\n		// Unmute\n		config.currentAudio.unmute();\n		config.currentAudio.muted = false;\n	}\n	console.log(this);\n\n}\n\n// Change volume level of current audio\nfunction onVolumeSliderInput(event) {\n	config.currentAudio.volume(this.value/100);\n}\n\nfunction updateScore(add) {\n\n	var score = document.querySelectorAll('.score')[0];\n	var scoreNumber = document.querySelectorAll('.score-number')[0];\n\n	score.classList.add('update');\n	setTimeout(()=>{ score.classList.remove('update'); }, 400);\n\n	config.currentScore += parseInt(add)\n	scoreNumber.innerHTML = config.currentScore;\n\n	return config.currentScore;\n\n}\n\n\n\n\n// ********\n// * Init *\n// ********\n\nconfig.currentAudio;\nconfig.currentMovements = [];\nconfig.currentScore = 0;\nconfig.currentStartDate = 0;\n\n// Get computed styles of whole page wrapper\nvar canvasComputedStyleObj = getComputedStyle(document.querySelectorAll('.wr')[0]);\n\n\n// Set canvas options\nconfig.oneWPercent = parseInt(canvasComputedStyleObj.width.slice(0,-2))/100;\nconfig.oneHPercent = parseInt(canvasComputedStyleObj.height.slice(0,-2))/100;\n\nconfig.canvOpts = {\n	bgURL: '../img/bg-crowd-1.jpg',\n	computedStyle: {\n		width: config.oneWPercent*100,\n		height: config.oneHPercent*100\n	},\n	movements: {\n		radius: config.oneWPercent * config.movements.radiusPercent,\n		strokeWidth: config.oneWPercent * config.movements.strokeWidthPercent\n	}\n}\n\n\n// Initialize 'fabric' canvas obj\nvar canvas = new fabric.StaticCanvas('game', {\n	width: config.canvOpts.computedStyle.width,\n	height: config.canvOpts.computedStyle.height,\n});\n\n// var topTriangle = new fabric.Triangle({\n// 	fill: config.colors.neutral,\n// 	stroke: '#FFFFFF',\n// 	strokeWidth: config.canvOpts.movements.strokeWidth,\n// 	height: config.oneHPercent * 15,\n// 	width: config.onehPercent * 15,\n// 	top: (config.oneHPercent * 20) + (config.oneHPercent * 15),\n// 	left: (config.oneWPercent * 20) + (config.oneHPercent * 15),\n// 	centeredRotation: true,\n// 	angle: 180\n// });\n\n// var bottomTriangle = new fabric.Triangle({\n// 	fill: config.colors.neutral,\n// 	stroke: '#FFFFFF',\n// 	strokeWidth: config.canvOpts.movements.strokeWidth,\n// 	height: config.oneHPercent * 15,\n// 	width: config.onehPercent * 15,\n// 	top: config.oneHPercent * 75,\n// 	left: config.oneWPercent * 19.5\n// });\n\n\nvar shadowCircle = new fabric.Circle({\n	// fill: config.colors.neutral,\n	fill: 'rgba(200,200,200,0.2)',\n	stroke: 'rgba(200,200,200,1)',\n	strokeWidth: config.canvOpts.movements.strokeWidth,\n	radius: config.canvOpts.movements.radius,\n	top: Math.round(config.oneHPercent*45),\n	left: config.oneWPercent * 20\n})\ncanvas.add(shadowCircle);\n\n// Set handler for game setup event\ndocument.addEventListener('agSetupEvent', onAgSetupEvent);\n\n// *********\n// * Audio *\n// *********\n\n// Add muted state saving feature to Howl (audio lib)\nHowl.prototype.muted = false;\nHowl.muted = false;\n\n// Get volume button element\nvar volumeBtn = document.querySelectorAll('.volume-btn')[0];\n// and set onClick event handler\nvolumeBtn.addEventListener('click', onVolumeBtnClick);\n\n// Get volume level slider\nvar volumeSlider = document.querySelectorAll('.volume-input')[0];\n// and set onInput event handler\nvolumeSlider.addEventListener('input', onVolumeSliderInput)\n\n\n// Change canvas background size on window resize\nwindow.onresize = function(){\n	refreshComputedSizes(canvasComputedStyleObj);\n	canvas.renderAll.bind(canvas);\n}\n\n\n\n\n\n// test\n\n// config.currentAudio = new Howl({\n// 		urls: ['../audio/12 Home.mp3'],\n// 		autoplay: false,\n// 		volume: 0.8,\n// 	});\n// config.currentAudio.play();\n\nwindow.updateScore = updateScore;\n// window.bla = addMovementOnCanvas;\n// document.addEventListener('mousemove', function(){\n// 	config.currentMovements[1].canvasObject.animate('left', '-=1050', {\n// 		onChange: canvas.renderAll.bind(canvas),\n// 		duration: 2400,\n// 		easing: fabric.util.linear\n// 	});\n// });\n\n})();",
 			"file": "src/js/render.js",
+			"file_size": 8139,
+			"file_write_time": 131059221945565546,
 			"settings":
 			{
-				"buffer_size": 815,
+				"buffer_size": 8011,
 				"line_ending": "Unix",
 				"name": "// Рисуем"
 			}
@@ -304,7 +335,7 @@
 			"file": "src/js/index.js",
 			"settings":
 			{
-				"buffer_size": 151,
+				"buffer_size": 188,
 				"line_ending": "Unix"
 			}
 		},
@@ -312,7 +343,15 @@
 			"file": "src/js/connection.js",
 			"settings":
 			{
-				"buffer_size": 2682,
+				"buffer_size": 1597,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/js/test-connection.js",
+			"settings":
+			{
+				"buffer_size": 237,
 				"line_ending": "Unix"
 			}
 		},
@@ -328,7 +367,7 @@
 			"file": "src/sass/_animations.sass",
 			"settings":
 			{
-				"buffer_size": 82,
+				"buffer_size": 218,
 				"line_ending": "Unix",
 				"name": "@keyframes starRotate"
 			}
@@ -345,16 +384,48 @@
 			"file": "src/sass/main.sass",
 			"settings":
 			{
-				"buffer_size": 1918,
+				"buffer_size": 245,
 				"line_ending": "Unix",
 				"name": "@import '../libs/normalize-css/normalize.css'"
+			}
+		},
+		{
+			"file": "src/sass/_game.sass",
+			"settings":
+			{
+				"buffer_size": 140,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/sass/_settings.sass",
+			"settings":
+			{
+				"buffer_size": 1527,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "_score.sass",
+			"settings":
+			{
+				"buffer_size": 289,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/sass/_logo.sass",
+			"settings":
+			{
+				"buffer_size": 403,
+				"line_ending": "Unix"
 			}
 		},
 		{
 			"file": "src/sass/_volume-input.sass",
 			"settings":
 			{
-				"buffer_size": 1370,
+				"buffer_size": 1352,
 				"line_ending": "Unix",
 				"name": ".volume-support"
 			}
@@ -371,7 +442,7 @@
 			"file": "gulpfile.js",
 			"settings":
 			{
-				"buffer_size": 2826,
+				"buffer_size": 2855,
 				"line_ending": "Unix"
 			}
 		}
@@ -418,12 +489,13 @@
 	"expanded_folders":
 	[
 		"/home/nikita/dev/prod.dev/guitAir",
-		"/home/nikita/dev/prod.dev/guitAir/public",
 		"/home/nikita/dev/prod.dev/guitAir/src",
 		"/home/nikita/dev/prod.dev/guitAir/src/js"
 	],
 	"file_history":
 	[
+		"/home/nikita/dev/prod.dev/guitAir/README.md",
+		"/home/nikita/dev/prod.dev/guitAir/src/js/index.js",
 		"/home/nikita/dev/prod.dev/guitAir/public/index.html",
 		"/home/nikita/dev/prod.dev/guitAir/.gitignore",
 		"/home/nikita/dev/prod.dev/guitAir/index.html",
@@ -505,6 +577,21 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"refreshComputedSizes",
+			"stroke",
+			"0",
+			"2",
+			"1",
+			"updateScore",
+			"currentStartDate",
+			"currentScore",
+			"currentMovements",
+			"currentAudio",
+			"var ",
+			"*****",
+			"Howl",
+			"width",
+			"audio",
 			"8.4px",
 			"16px",
 			"support",
@@ -602,7 +689,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -611,15 +698,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1103,
+						"buffer_size": 1188,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								384,
-								384
+								22,
+								22
 							]
 						],
 						"settings":
@@ -632,7 +719,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -641,15 +728,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 815,
+						"buffer_size": 8011,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								317,
-								317
+								3705,
+								3705
 							]
 						],
 						"settings":
@@ -659,40 +746,38 @@
 							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 3498.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
 					"file": "src/js/index.js",
-					"semi_transient": false,
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 151,
+						"buffer_size": 188,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								29,
-								29
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"auto_name": "",
-							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
 							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -701,15 +786,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2682,
+						"buffer_size": 1597,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								819,
-								819
+								1394,
+								1394
 							]
 						],
 						"settings":
@@ -720,14 +805,43 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 338.0,
+						"translation.y": 858.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
 					"buffer": 4,
+					"file": "src/js/test-connection.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 237,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								152,
+								152
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
+							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
 					"file": ".gitignore",
 					"semi_transient": false,
 					"settings":
@@ -752,22 +866,22 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 15,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 5,
+			"selected": 7,
 			"sheets":
 			[
 				{
-					"buffer": 5,
+					"buffer": 6,
 					"file": "src/sass/_animations.sass",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 82,
+						"buffer_size": 218,
 						"regions":
 						{
 						},
@@ -788,11 +902,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": "src/sass/_general.sass",
 					"semi_transient": false,
 					"settings":
@@ -817,24 +931,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 8,
 					"file": "src/sass/main.sass",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1918,
+						"buffer_size": 245,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1616,
-								1616
+								123,
+								123
 							]
 						],
 						"settings":
@@ -845,27 +959,146 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1584.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
-					"file": "src/sass/_volume-input.sass",
+					"buffer": 9,
+					"file": "src/sass/_game.sass",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1370,
+						"buffer_size": 140,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								597,
-								597
+								140,
+								140
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
+							"syntax": "Packages/Syntax Highlighting for Sass/Syntaxes/Sass.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "src/sass/_settings.sass",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1527,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								641,
+								641
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
+							"syntax": "Packages/Syntax Highlighting for Sass/Syntaxes/Sass.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 721.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "_score.sass",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 289,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								289,
+								289
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
+							"syntax": "Packages/Syntax Highlighting for Sass/Syntaxes/Sass.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "src/sass/_logo.sass",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 403,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								403,
+								403
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/peel.tmTheme",
+							"syntax": "Packages/Syntax Highlighting for Sass/Syntaxes/Sass.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "src/sass/_volume-input.sass",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1352,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								40,
+								40
 							]
 						],
 						"settings":
@@ -877,14 +1110,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 346.0,
+						"translation.y": 198.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 14,
 					"file": "src/sass/_vars.sass",
 					"semi_transient": false,
 					"settings":
@@ -909,24 +1142,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 15,
 					"file": "gulpfile.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2826,
+						"buffer_size": 2855,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2080,
-								2080
+								890,
+								890
 							]
 						],
 						"settings":
@@ -936,10 +1169,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1452.0,
+						"translation.y": 1914.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 7,
 					"type": "text"
 				}
 			]
@@ -991,6 +1224,10 @@
 	{
 		"height": 0.0
 	},
+	"output.unsaved_changes":
+	{
+		"height": 142.0
+	},
 	"pinned_build_system": "",
 	"project": "untitled.sublime-project",
 	"replace":
@@ -1029,7 +1266,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 1,
+	"selected_group": 0,
 	"settings":
 	{
 	},
