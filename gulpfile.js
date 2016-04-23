@@ -73,7 +73,7 @@ gulp.task('js', function(){
 	// .pipe(newer('public/js/'))
 	.pipe(maps.init())
 	// .pipe(uglify())
-	// .pipe(rigger())
+	.pipe(rigger())
 	.pipe(babel({
 			presets: ['es2015']
 		}))

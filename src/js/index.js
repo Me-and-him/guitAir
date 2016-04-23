@@ -1,14 +1,14 @@
 'use strict';
 
-//= index.js
+//= connection.js
 //= render.js
 
 
 // *** List of UI elements ***
 // 
-// Settings
+// Settings		+
 // Score
-// Logo
+// Logo				+
 // Volume
 // Pause
 
