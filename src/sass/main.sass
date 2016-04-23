@@ -5,6 +5,7 @@
 @import 'vars'
 
 @import 'general'
+@import 'volume-input'
 
 .logo
 	font-size: 0.667em
@@ -43,6 +44,62 @@
 
 		.fa-star-o
 			padding-right: 0.3em
+
+.settings-section
+	position: absolute
+	top: 1.5em
+	right: 1.5em
+	height: 3.15em
+	// width: 3.15em
+	padding: 0.1em
+	// line-height: 1.8em
+	text-shadow: 0 0.2em rgba(0,0,0,.5)
+	
+	.settings-btn, .volume-input-wr
+		background: transparent
+		display: inline-block
+		margin-left: 1em
+		border: none
+		border-radius: 50%
+		color: #fff
+		opacity: 0.8
+		// border: 2px solid #fff
+		transition: all 0.08s ease-in-out
+		&:hover
+			color: $yellow
+			opacity: 1
+			text-shadow: 0 0 0.7em rgba(0,0,0,.5)
+			cursor: pointer
+		&:active, &:focus
+			outline: none
+		&:active
+			transform: scale(1)
+			color: darken($yellow, 20%)
+
+		.fa
+			font-size: 2.7em
+			
+	.volume-btn
+		&:hover
+			transform: scale(1.15)
+		&:active
+			transform: scale(1)
+
+	.volume-input-wr
+		height: 100%
+		display: inline-block
+		vertical-align: top
+		// transform: rotate(-90deg)
+		.volume-input
+			padding: 1.2em 0 0
+			background-color: transparent
+			// line-height: 100%
+
+	.gear-btn		
+		&:hover
+			transform: scale(1.1) rotate(30deg)
+		&:active
+			transform: scale(1)
 
 #game
 	// width: 100%
