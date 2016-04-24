@@ -1,4 +1,32 @@
 ;
+//
+//	Utils
+//
+// * animate(cb, duraton) -- wrapper of requestAnimationFrame
+//
+// DOM manipulations
+//
+// * closePopup(event) -- close popup with users unique code
+// * onVolumeBtnClick(event) -- handler for volume buttons clicks (mute/unmute trigger)
+// * onVolumeSliderInput(event) -- change audio volume whenvolume slider is being moved
+// * updateScore(number) -- update current score
+//
+//	Canvas
+//
+// * refreshComputedSizes(object) -- change <canvas> sizes to actual
+// * addMovementOnCanvas(movementInfo) -- add new movement canvas-object
+// * animateMovement(object) -- make recieved already added movement run (animate)
+// * onAgSetupEvent(event) -- handler for event, fired when game settings are recieved
+//
+// To remove
+//
+// * start() -- start game
+// * nextBeat(isFirst) -- process (and add) next movement
+//
+// Initialization
+//
+
+
 (function(){
 
 function animate(draw, duration) {
@@ -35,6 +63,56 @@ var config = {
 	}
 }
 
+function closePopup(event) {
+	document.querySelectorAll('.popup')[0].classList.add('closed')
+	document.querySelectorAll('.logo')[0].classList.remove('with-popup')
+}
+
+// Mutes / unmutes audio
+function onVolumeBtnClick(event) {
+
+	if (!config.currentAudio.muted) {
+
+		// Change view
+		this.childNodes[1].classList.remove('fa-volume-up');
+		this.childNodes[1].classList.add('fa-volume-off');
+
+		// Mute
+		config.currentAudio.mute();
+		config.currentAudio.muted = true;
+	} else {
+
+		// Change view
+		this.childNodes[1].classList.remove('fa-volume-off');
+		this.childNodes[1].classList.add('fa-volume-up');
+
+		// Unmute
+		config.currentAudio.unmute();
+		config.currentAudio.muted = false;
+	}
+	console.log(this);
+
+}
+
+// Change volume level of current audio
+function onVolumeSliderInput(event) {
+	config.currentAudio.volume(this.value/100);
+}
+
+function updateScore(add) {
+
+	var score = document.querySelectorAll('.score')[0];
+	var scoreNumber = document.querySelectorAll('.score-number')[0];
+
+	score.classList.add('update');
+	setTimeout(()=>{ score.classList.remove('update'); }, 400);
+
+	config.currentScore += parseInt(add);
+	scoreNumber.innerHTML = config.currentScore;
+
+	return config.currentScore;
+
+}
 
 // **********
 // * CANVAS *
@@ -54,6 +132,7 @@ function refreshComputedSizes(object) {
 	});
 
 }
+
 
 function addMovementOnCanvas(movementInfo) {
 
@@ -82,6 +161,19 @@ function addMovementOnCanvas(movementInfo) {
 	canvas.add(movement);
 	canvas.renderAll();
 	// movementInfo.state = 'added';
+}
+
+function animateMovement(movementInfo) {
+	// movementInfo.canvasObject.animate('left', ''+(config.oneWPercent * 20), {
+	// 	// onChange: canvas.renderAll.bind(canvas),
+	// 	onChange: requestAnimationFrame(canvas.renderAll.bind(canvas), 100),
+	// 	// duration: config.currentMinInterval*16
+	// });
+
+	animate(function(time){
+		movementInfo.canvasObject.setLeft( (time/config.currentMinInterval*16) + config.oneWPercent*20 );
+		canvas.renderAll.bind(canvas);
+	}, config.currentMinInterval*16);
 }
 
 
@@ -125,7 +217,7 @@ function start() {
 	setTimeout(function(){
 		nextBeat(true);
 	}, config.currentBeginningOffset);
-	config.currentAudio.start();
+	config.currentAudio.play();
 }
 
 function nextBeat(isFirst) {
@@ -134,81 +226,28 @@ function nextBeat(isFirst) {
 	if (isFirst === true) {
 		addMovementOnCanvas(config.currentMovements[0]);
 		animateMovement(config.currentMovements[0]);
-		setTimeout(nextBeat, config.currentMinInterval);
+		// setTimeout(nextBeat, config.currentMinInterval);
 		return;
 	}
 
 	// Insert new movement
 	var appearingMovementIndex = Math.floor((Date.now() - config.currentStartDate) / config.currentMinInterval);
+
 	console.log(appearingMovementIndex);
+	
 	var appearingMovement = config.currentMovements[appearingMovementIndex];
 
 	addMovementOnCanvas(appearingMovement);
 	animateMovement(appearingMovement);
-	setTimeout(nextBeat, config.currentMinInterval);
+	// setTimeout(nextBeat, config.currentMinInterval);
 	console.log(appearingMovementIndex);
 
 }
 
-function animateMovement(movementInfo) {
-	// movementInfo.canvasObject.animate('left', ''+(config.oneWPercent * 20), {
-	// 	// onChange: canvas.renderAll.bind(canvas),
-	// 	onChange: requestAnimationFrame(canvas.renderAll.bind(canvas), 100),
-	// 	// duration: config.currentMinInterval*16
-	// });
-
-	animate(function(time){
-		movementInfo.canvasObject.setLeft( (time/config.currentMinInterval*16) + config.oneWPercent*20 );
-		canvas.renderAll.bind(canvas);
-	}, config.currentMinInterval*16);
-}
 
 
-// Mutes / unmutes audio
-function onVolumeBtnClick(event) {
 
-	if (!config.currentAudio.muted) {
 
-		// Change view
-		this.childNodes[1].classList.remove('fa-volume-up');
-		this.childNodes[1].classList.add('fa-volume-off');
-
-		// Mute
-		config.currentAudio.mute();
-		config.currentAudio.muted = true;
-	} else {
-
-		// Change view
-		this.childNodes[1].classList.remove('fa-volume-off');
-		this.childNodes[1].classList.add('fa-volume-up');
-
-		// Unmute
-		config.currentAudio.unmute();
-		config.currentAudio.muted = false;
-	}
-	console.log(this);
-
-}
-
-// Change volume level of current audio
-function onVolumeSliderInput(event) {
-	config.currentAudio.volume(this.value/100);
-}
-
-function updateScore(add) {
-
-	var score = document.querySelectorAll('.score')[0];
-	var scoreNumber = document.querySelectorAll('.score-number')[0];
-
-	score.classList.add('update');
-	setTimeout(()=>{ score.classList.remove('update'); }, 400);
-
-	config.currentScore += parseInt(add)
-	scoreNumber.innerHTML = config.currentScore;
-
-	return config.currentScore;
-
-}
 
 
 
@@ -217,7 +256,6 @@ function updateScore(add) {
 // * Init *
 // ********
 
-config.currentAudio;
 config.currentMovements = [];
 config.currentScore = 0;
 config.currentStartDate = 0;
@@ -249,29 +287,7 @@ var canvas = new fabric.StaticCanvas('game', {
 	height: config.canvOpts.computedStyle.height,
 });
 
-// var topTriangle = new fabric.Triangle({
-// 	fill: config.colors.neutral,
-// 	stroke: '#FFFFFF',
-// 	strokeWidth: config.canvOpts.movements.strokeWidth,
-// 	height: config.oneHPercent * 15,
-// 	width: config.onehPercent * 15,
-// 	top: (config.oneHPercent * 20) + (config.oneHPercent * 15),
-// 	left: (config.oneWPercent * 20) + (config.oneHPercent * 15),
-// 	centeredRotation: true,
-// 	angle: 180
-// });
-
-// var bottomTriangle = new fabric.Triangle({
-// 	fill: config.colors.neutral,
-// 	stroke: '#FFFFFF',
-// 	strokeWidth: config.canvOpts.movements.strokeWidth,
-// 	height: config.oneHPercent * 15,
-// 	width: config.onehPercent * 15,
-// 	top: config.oneHPercent * 75,
-// 	left: config.oneWPercent * 19.5
-// });
-
-
+// Draw "perfect success" place shadow circle
 var shadowCircle = new fabric.Circle({
 	// fill: config.colors.neutral,
 	fill: 'rgba(200,200,200,0.2)',
@@ -285,6 +301,11 @@ canvas.add(shadowCircle);
 
 // Set handler for game setup event
 document.addEventListener('agSetupEvent', onAgSetupEvent);
+
+// Show current game code
+var codeContainer = document.getElementById('code-container');
+codeContainer.innerHTML = code;
+
 
 // *********
 // * Audio *
@@ -315,23 +336,11 @@ window.onresize = function(){
 
 
 
-// test
 
-// config.currentAudio = new Howl({
-// 		urls: ['../audio/12 Home.mp3'],
-// 		autoplay: false,
-// 		volume: 0.8,
-// 	});
-// config.currentAudio.play();
 
-window.updateScore = updateScore;
-// window.bla = addMovementOnCanvas;
-// document.addEventListener('mousemove', function(){
-// 	config.currentMovements[1].canvasObject.animate('left', '-=1050', {
-// 		onChange: canvas.renderAll.bind(canvas),
-// 		duration: 2400,
-// 		easing: fabric.util.linear
-// 	});
-// });
+
+
+// TEST
+document.addEventListener('click', closePopup);
 
 })();

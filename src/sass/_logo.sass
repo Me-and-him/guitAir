@@ -6,9 +6,13 @@
 	height: 5em
 	// top: 2.25em
 	top: 2em
-	left: calc(50% - 7.6875em)
+	left: calc(50% - 6.4em) //calc(50% - 7.6875em)
 	z-index: 9999
 	// opacity: 0.9
+	transition: top 0.4s ease-in-out
+
+	&.with-popup
+		top: 7em
 
 	// width = height * 3.075
 	img

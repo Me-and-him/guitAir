@@ -1,0 +1,51 @@
+.popup
+	position: fixed
+	left: 25%
+	top: 10%
+	height: 45%
+	width: 50%
+	padding: 9.5em 1em 1em
+	background-color: rgba(0,0,0,.95)
+	border-radius: 0.2em
+	box-shadow: 0 0.2em 1.2em rgba(0,0,0,.8)
+	color: #fff
+	text-align: center
+	transition: all 0.2s ease-in
+
+	// .close-btn
+	// 	display: block
+	// 	position: absolute
+	// 	top: 0.5em
+	// 	right: 0.5em
+	// 	font-size: 2em
+	// 	opacity: 0.5
+
+	// 	&:hover
+	// 		opacity: 1
+	// 		color: $yellow
+	// 		cursor: pointer
+	// 		transform: scale(1.1)
+
+	strong
+		font-size: 2.5em
+		font-weight: normal
+
+	#code-container
+		display: block
+		position: relative
+		margin: 0.5em auto
+		padding: 0.5em 0.3em
+		width: 5em
+		font-size: 2em
+		border: 0.1em solid #fff
+
+	&.closed
+		// height: auto
+		// width: auto
+		// padding: 0
+		// top: 0
+		// left: 50%
+		// background: transparent
+		// box-shadow: none
+		opacity: 0
+		transform: translateY(10em)

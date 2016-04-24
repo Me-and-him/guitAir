@@ -5,6 +5,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 	<title>GuitAir</title>
 	<link rel="stylesheet" href="css/main.css">
+	<script>
+		// var code = {{ code }};
+		var code = '123654';
+	</script>
 	<script src="libs/fabric.js/dist/fabric.min.js"></script>
 	<script src="js/index.js" async defer></script>
 	
@@ -13,9 +17,15 @@
 <body>
 	<div class="wr">
 
-		<div class="logo">
+		<div class="logo with-popup">
 			<img src="img/Guitair-logo-text.png" alt="GuitAir">
 			<img src="img/Guitair-logo-star.png" alt="GuitAir" class="star">
+		</div>
+
+		<div class="popup">
+			<!-- <i class="close-btn fa fa-close"></i> -->
+			<strong>Ваш код</strong><br />
+			<span id="code-container"></span>
 		</div>
 
 		<div class="score">
