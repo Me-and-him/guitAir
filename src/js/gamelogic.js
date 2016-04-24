@@ -91,12 +91,12 @@
 	}
     }
 
-    document.addEventListener('agSetupEvent', onAgSetupEvent);
-    // document.addEventListener('agSetupEvent', function(event) {
-    // 	console.log('agSetupEvent: ' + JSON.stringify(event.detail));
-    // });
-    Document.addEventListener('agCommandEvent', onAgCommandEvent);
-    // document.addEventListener('agCmmandEvent', function(event) {
-    // 	console.log('agCommandEvent: ' + JSON.stringify(event.detail));
-    // });
+    // document.addEventListener('agSetupEvent', onAgSetupEvent);
+    document.addEventListener('agSetupEvent', function(event) {
+    	console.log('agSetupEvent: ' + JSON.stringify(event.detail));
+    });
+    // document.addEventListener('agCommandEvent', onAgCommandEvent);
+    document.addEventListener('agCommandEvent', function(event) {
+    	console.log('agCommandEvent: ' + JSON.stringify(event.detail));
+    });
 })();

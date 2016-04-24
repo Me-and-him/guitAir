@@ -135,6 +135,8 @@ function refreshComputedSizes(object) {
 
 function addMovementOnCanvas(movementInfo) {
 
+	if (movementInfo.name == 'pass') return;
+
 	var radius = config.canvOpts.movements.radius;
 	var strokeWidth = config.canvOpts.movements.strokeWidth;
 	// var x = Math.round(config.canvOpts.computedStyle.width - (config.canvOpts.computedStyle.width/100)*3) - radius*2;
@@ -142,7 +144,7 @@ function addMovementOnCanvas(movementInfo) {
 	var y = Math.round(config.oneHPercent * 45) + config.canvOpts.movements.strokeWidth*1.6;
 
 	var circle = new fabric.Circle({
-		fill: movementInfo.color,
+		fill: config.colors.neutral,
 		stroke: '#FFFFFF',
 		strokeWidth: strokeWidth,
 		radius: radius,
@@ -150,10 +152,41 @@ function addMovementOnCanvas(movementInfo) {
 		originX: 'center'
 	});
 
-	var arrow = new fabric.Path({
-		originY: 'center',
-		originX: 'center'
-	})
+	// console.log(-circle.getRadiusX()*0.8);
+	var arrow;
+
+	switch (movementInfo.name) {
+		case 'up':
+			arrow = new fabric.Path(`
+				M ${-circle.getRadiusX()*0.65} ${circle.getRadiusY()*0.11}
+				L 0 ${-circle.getRadiusY()*0.55}
+				L ${circle.getRadiusX()*0.65} ${circle.getRadiusY()*0.11}
+				L ${circle.getRadiusX()*0.5} ${circle.getRadiusY()*0.25}
+				L 0 ${-circle.getRadiusY()*0.25}
+				L ${-circle.getRadiusX()*0.5} ${circle.getRadiusY()*0.25}
+				z`, {
+				// fill: '#fff',
+				originY: 'center',
+				originX: 'center'
+			});
+		break;
+
+		case 'down':
+			arrow = new fabric.Path(`
+				M ${circle.getRadiusX()*0.65} ${-circle.getRadiusY()*0.11}
+				L 0 ${circle.getRadiusY()*0.55}
+				L ${-circle.getRadiusX()*0.65} ${-circle.getRadiusY()*0.11}
+				L ${-circle.getRadiusX()*0.5} ${-circle.getRadiusY()*0.25}
+				L 0 ${circle.getRadiusY()*0.25}
+				L ${circle.getRadiusX()*0.5} ${-circle.getRadiusY()*0.25}
+				z`, {
+				// fill: '#fff',
+				originY: 'center',
+				originX: 'center'
+			});
+		break
+	}
+	
 
 	var movement = new fabric.Group([circle, arrow], {
 		top: y,
@@ -168,6 +201,9 @@ function addMovementOnCanvas(movementInfo) {
 }
 
 function animateMovement(movementInfo) {
+
+	// if (movementInfo.name == 'pass') return;
+
 	movementInfo.canvasObject.animate('left', ''+((config.oneWPercent * 20) + config.canvOpts.movements.strokeWidth*1.5), {
 		// onChange: canvas.renderAll.bind(canvas),
 		onChange: canvas.renderAll.bind(canvas),
@@ -175,31 +211,68 @@ function animateMovement(movementInfo) {
 	});
 }
 
-function showMovementResult(event) {
-	var status = event.detail.glStatus;
+// Actions performed when current game settings recieved
+function onGlAddMovement(event) {
+
+	config.currentMovements.push({name: event.detail});
+	var thisMovement = config.currentMovements[config.currentMovements.length-1];
+
+	if (thisMovement.name == 'pass') return;
+
+	addMovementOnCanvas(thisMovement);
+	animateMovement(thisMovement);
+
+}
+
+function onGlStatus(event) {
+
+	var status = event.detail.status;
 	var movementIndex = event.detail.index;
+
+	if (config.currentMovements[movementIndex].name == 'pass') return;
+
+	// console.log(movementIndex);
 	var canvObj = config.currentMovements[movementIndex].canvasObject;
 
 
 	// TEST
 
-	canvObj.setFill(config.colors[status]);
-	canvObj.animate('opacity', 0, {
-		onChange: canvas.renderAll.bind(canvas),
-		duration: 1000
+
+	canvObj.set({
+		fill: config.colors[status],
+		// centeredScaling: true
 	});
 
-}
+	switch (status) {
+		case 'success':
+			canvObj.animate({
+				'scaleX': 6,
+				'scaleY': 6,
+				'opacity': 0,
+				'left': '-='+config.canvOpts.movements.radius*5.2,
+				'top': '-='+config.canvOpts.movements.radius*5.2
+			}, {
+				onChange: canvas.renderAll.bind(canvas),
+				duration: 700,
+				easing: fabric.util.ease.easeOutQuart
+			});
+		break;
 
-
-// Actions performed when current game settings recieved
-function onGlAddMovement(event) {
-
-	config.currentMovements.push({name: event.detail});
-	var thisMovement = config.currentMovements[length-1];
-
-	addMovementOnCanvas(thisMovement);
-	animateMovement(thisMovement);
+		case 'fail':
+			canvObj.animate({
+				'scaleX': 0.8,
+				'scaleY': 0.8,
+				'opacity': 0,
+				'left': ''+(-config.canvOpts.movements.radius),
+				// 'top': '-='+config.canvOpts.movements.radius
+			}, {
+				onChange: canvas.renderAll.bind(canvas),
+				duration: 1000,
+				// easing: fabric.util.ease.easeOutQuart
+			});
+		break;
+	}
+	
 
 }
 
@@ -247,6 +320,10 @@ config.currentMovements = [];
 config.currentScore = 0;
 config.currentStartDate = 0;
 
+// To remove!
+config.currentBpm = 128;
+config.currentMinInterval = (config.currentBpm*1000) / (60*16)
+
 // Get computed styles of whole page wrapper
 var canvasComputedStyleObj = getComputedStyle(document.querySelectorAll('.wr')[0]);
 
@@ -287,7 +364,10 @@ var shadowCircle = new fabric.Circle({
 canvas.add(shadowCircle);
 
 // Set handler for game setup event
-document.addEventListener('GlAddMovement', onGlAddMovement);
+document.addEventListener('glAddMovement', onGlAddMovement);
+
+// Set handler for movement result event
+document.addEventListener('glStatus', onGlStatus);
 
 // Show current game code
 var codeContainer = document.getElementById('code-container');
