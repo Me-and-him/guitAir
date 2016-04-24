@@ -30,7 +30,7 @@
 	document.dispatchEvent(newEvent);
 	// BPM, minInterval, beginning offset
 	config.bpm = event.detail.bpm;
-	config.minInterval = 60000 / config.bpm;
+	config.minInterval = 60000 * 4 / config.bpm;
 	config.beginningOffset = event.detail.offset;
 	// Start.
 	config.score = 0;
