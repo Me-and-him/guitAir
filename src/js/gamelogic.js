@@ -25,12 +25,12 @@
 	// Generate new event for the view.
 	var newEvent = new CustomEvent(
 	    'glSetupEvent',
-	    {detail: {song: event.song, bpm: event.bpm, commands: event.commands, music: config.audio}}
+	    {detail: {song: event.detail.song, bpm: event.detail.bpm, commands: event.detail.commands, music: config.audio}}
 	);
 	document.dispatchEvent(newEvent);
 	// BPM, minInterval, beginning offset
 	config.bpm = event.detail.bpm;
-	config.minInterval = (config.bpm * 1000) / (60 * 16);
+	config.minInterval = 60000 / config.bpm;
 	config.beginningOffset = event.detail.offset;
 	// Start.
 	config.score = 0;
@@ -65,7 +65,7 @@
 		    newScore: config.score
 		}}
 	    );
-	    document.addEventListener(newEvent);
+	    document.dispatchEvent(newEvent);
 	} else {
 	    config.score -= 10;
 	    var newEvent = new CustomEvent(
@@ -76,7 +76,7 @@
 		    newScore: config.score
 		}}
 	    );
-	    document.addEventListener(newEvent);
+	    document.dispatchEvent(newEvent);
 	}
 	config.lastReceivedIndex++;
     }

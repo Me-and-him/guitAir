@@ -206,13 +206,13 @@ function animateMovement(movementInfo) {
 
 	movementInfo.canvasObject.animate('left', ''+((config.oneWPercent * 20) + config.canvOpts.movements.strokeWidth*1.5), {
 		onChange: canvas.renderAll.bind(canvas),
-		duration: config.currentMinInterval*16
+		duration: config.currentMinInterval
 	});
 }
 
 function onGlSetupEvent(event) {
 	config.currentBpm = event.detail.bpm;
-	config.currentMinInterval = (config.currentBpm*1000)/(60*16);
+	config.currentMinInterval = 60000*4 / config.currentBpm;
 	config.currentSongName = event.detail.song;
 	config.currentAudio = event.detail.music;
 	closePopup();
@@ -286,35 +286,6 @@ function onGlStatus(event) {
 
 }
 
-// function start() {
-// 	config.currentScore = 0;
-// 	config.currentStartDate = Date.now();
-// 	setTimeout(function(){
-// 		nextBeat(true);
-// 	}, config.currentBeginningOffset);
-// 	config.currentAudio.play();
-// }
-
-// function nextBeat(isFirst) {
-
-// 	// If we're in the beginning of song
-// 	if (isFirst === true) {
-// 		addMovementOnCanvas(config.currentMovements[0]);
-// 		animateMovement(config.currentMovements[0]);
-// 		return;
-// 	}
-
-// 	// Insert new movement
-// 	var appearingMovementIndex = Math.floor((Date.now() - config.currentStartDate) / config.currentMinInterval);
-	
-// 	var appearingMovement = config.currentMovements[appearingMovementIndex];
-
-// 	addMovementOnCanvas(appearingMovement);
-// 	animateMovement(appearingMovement);
-
-// }
-
-
 
 
 
@@ -330,13 +301,9 @@ config.currentMovements = [];
 config.currentScore = 0;
 config.currentStartDate = 0;
 
-// To remove!
-// config.currentBpm = 128;
-// config.currentMinInterval = (config.currentBpm*1000) / (60*16)
 
 // Get computed styles of whole page wrapper
 var canvasComputedStyleObj = getComputedStyle(document.querySelectorAll('.wr')[0]);
-
 
 // Set canvas options
 config.oneWPercent = parseInt(canvasComputedStyleObj.width.slice(0,-2))/100;
@@ -362,8 +329,7 @@ var canvas = new fabric.StaticCanvas('game', {
 });
 
 // Draw "perfect success" place shadow circle
-var shadowCircle = new fabric.Circle({
-	// fill: config.colors.neutral,
+config.shadowCircle = new fabric.Circle({
 	fill: 'rgba(200,200,200,0.2)',
 	stroke: 'rgba(200,200,200,1)',
 	strokeWidth: config.canvOpts.movements.strokeWidth*2,
@@ -371,7 +337,7 @@ var shadowCircle = new fabric.Circle({
 	top: Math.round(config.oneHPercent*45),
 	left: config.oneWPercent * 20
 })
-canvas.add(shadowCircle);
+canvas.add(config.shadowCircle);
 
 // Set handler for adding of next movement in queue
 document.addEventListener('glAddMovement', onGlAddMovement);
