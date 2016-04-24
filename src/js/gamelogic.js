@@ -64,7 +64,7 @@
 		    );
 		    document.addEventListener(newEvent);
 		}
-		config.lastPerformedAction = undefined;
+		config.lastPerformedAction = 'pass';
 	    }, config.minInterval);
 	    //
 	    var newEvent = new CustomEvent(
