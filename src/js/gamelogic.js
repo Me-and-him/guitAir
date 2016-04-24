@@ -41,7 +41,9 @@
 	    // Set deciding the status in the future.
 	    setTimeout(function() {
 		var index = Math.round((config.lastPerformedAction.time - config.startDate - config.beginningOffset) / config.minInterval);
-		if (config.lastPerformedAction === config.movements[supposedIndex]) {
+		var valid = config.lastPerformedAction.movement === config.movements[index] &&
+		    Math.abs(config.lastPerformedAction.time - Date.now()) < config.minInterval / 2;
+		if (valid) {
 		    config.score += 100;
 		    var newEvent = new CustomEvent(
 			'glStatus',
