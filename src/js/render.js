@@ -64,8 +64,8 @@ var config = {
 }
 
 function closePopup(event) {
-	document.querySelectorAll('.popup')[0].classList.add('closed')
-	document.querySelectorAll('.logo')[0].classList.remove('with-popup')
+	document.querySelectorAll('.popup')[0].classList.add('closed');
+	document.querySelectorAll('.logo')[0].classList.remove('with-popup');
 }
 
 // Mutes / unmutes audio
@@ -98,7 +98,7 @@ function onVolumeSliderInput(event) {
 	config.currentAudio.volume(this.value/100);
 }
 
-function updateScore(add) {
+function updateScore(newScore) {
 
 	var score = document.querySelectorAll('.score')[0];
 	var scoreNumber = document.querySelectorAll('.score-number')[0];
@@ -106,7 +106,7 @@ function updateScore(add) {
 	score.classList.add('update');
 	setTimeout(()=>{ score.classList.remove('update'); }, 400);
 
-	config.currentScore += parseInt(add);
+	config.currentScore = parseInt(newScore);
 	scoreNumber.innerHTML = config.currentScore;
 
 	return config.currentScore;
@@ -205,10 +205,21 @@ function animateMovement(movementInfo) {
 	// if (movementInfo.name == 'pass') return;
 
 	movementInfo.canvasObject.animate('left', ''+((config.oneWPercent * 20) + config.canvOpts.movements.strokeWidth*1.5), {
-		// onChange: canvas.renderAll.bind(canvas),
 		onChange: canvas.renderAll.bind(canvas),
 		duration: config.currentMinInterval*16
 	});
+}
+
+function onGlSetupEvent(event) {
+	config.currentBpm = event.detail.bpm;
+	config.currentMinInterval = (config.currentBpm*1000)/(60*16);
+	config.currentSongName = event.detail.song;
+	config.currentAudio = event.detail.music;
+	closePopup();
+	console.log(event.detail.bpm);
+
+	// Test
+	config.currentAudio.play();
 }
 
 // Actions performed when current game settings recieved
@@ -228,16 +239,13 @@ function onGlStatus(event) {
 
 	var status = event.detail.status;
 	var movementIndex = event.detail.index;
+	var newScore = event.detail.newScore;
 
 	if (config.currentMovements[movementIndex].name == 'pass') return;
 
-	// console.log(movementIndex);
 	var canvObj = config.currentMovements[movementIndex].canvasObject;
 
-
-	// TEST
-
-
+	// Run canvas animation
 	canvObj.set({
 		fill: config.colors[status],
 		// centeredScaling: true
@@ -272,7 +280,9 @@ function onGlStatus(event) {
 			});
 		break;
 	}
-	
+
+	// Update score
+	updateScore(newScore);	
 
 }
 
@@ -321,8 +331,8 @@ config.currentScore = 0;
 config.currentStartDate = 0;
 
 // To remove!
-config.currentBpm = 128;
-config.currentMinInterval = (config.currentBpm*1000) / (60*16)
+// config.currentBpm = 128;
+// config.currentMinInterval = (config.currentBpm*1000) / (60*16)
 
 // Get computed styles of whole page wrapper
 var canvasComputedStyleObj = getComputedStyle(document.querySelectorAll('.wr')[0]);
@@ -363,11 +373,14 @@ var shadowCircle = new fabric.Circle({
 })
 canvas.add(shadowCircle);
 
-// Set handler for game setup event
+// Set handler for adding of next movement in queue
 document.addEventListener('glAddMovement', onGlAddMovement);
 
 // Set handler for movement result event
 document.addEventListener('glStatus', onGlStatus);
+
+// Set handler for game setup event
+document.addEventListener('glSetupEvent', onGlSetupEvent);
 
 // Show current game code
 var codeContainer = document.getElementById('code-container');
@@ -408,6 +421,6 @@ window.onresize = function(){
 
 
 // TEST
-document.addEventListener('click', closePopup);
+// document.addEventListener('click', closePopup);
 
 })();
