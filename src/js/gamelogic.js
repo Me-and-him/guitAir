@@ -37,11 +37,13 @@
 	config.startDate = Date.now();
 	config.displayedIndex = 0;
 	config.lastReceivedIndex = 0;
+	config.lastPerformedAction = undefined;
 	function sendMovement() {
 	    // Set deciding the status in the future.
 	    setTimeout(function() {
-		var index = Math.round((config.lastPerformedAction.time - config.startDate - config.beginningOffset) / config.minInterval);
-		var valid = config.lastPerformedAction.movement === config.movements[index] &&
+		//var index = Math.round((config.lastPerformedAction.time - config.startDate - config.beginningOffset) / config.minInterval);
+		var index = config.displayedIndex - 1;
+		var valid = config.lastPerformedAction.movement == config.movements[index] &&
 		    Math.abs(config.lastPerformedAction.time - Date.now()) < config.minInterval / 2;
 		if (valid) {
 		    config.score += 100;
@@ -53,7 +55,7 @@
 			    newScore: config.score
 			}}
 		    );
-		    document.addEventListener(newEvent);
+		    document.dispatchEvent(newEvent);
 		} else {
 		    config.score -= 10;
 		    var newEvent = new CustomEvent(
@@ -64,7 +66,7 @@
 			    newScore: config.score
 			}}
 		    );
-		    document.addEventListener(newEvent);
+		    document.dispatchEvent(newEvent);
 		}
 		config.lastPerformedAction = 'pass';
 	    }, config.minInterval);
@@ -74,6 +76,7 @@
 		{detail: config.movements[config.displayedIndex]}
 	    );
 	    console.log(newEvent);
+	    config.displayedIndex++;
 	    document.dispatchEvent(newEvent);
 	    setTimeout(sendMovement, config.minInterval);
 	}
