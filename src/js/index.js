@@ -4,6 +4,7 @@
 
 //= render.js
 //= connection.js
+//= gamelogic.js
 
 
 // *** List of UI elements ***
