@@ -90,7 +90,6 @@ function onVolumeBtnClick(event) {
 		config.currentAudio.unmute();
 		config.currentAudio.muted = false;
 	}
-	console.log(this);
 
 }
 
@@ -140,50 +139,53 @@ function addMovementOnCanvas(movementInfo) {
 	var strokeWidth = config.canvOpts.movements.strokeWidth;
 	// var x = Math.round(config.canvOpts.computedStyle.width - (config.canvOpts.computedStyle.width/100)*3) - radius*2;
 	var x = Math.round(config.canvOpts.computedStyle.width);
-	var y = Math.round(config.oneHPercent * 45);
+	var y = Math.round(config.oneHPercent * 45) + config.canvOpts.movements.strokeWidth*1.6;
 
-	// console.log(x + ' - ' + y);
-
-	var movement = new fabric.Circle({
+	var circle = new fabric.Circle({
 		fill: movementInfo.color,
 		stroke: '#FFFFFF',
 		strokeWidth: strokeWidth,
 		radius: radius,
-		// radius: 100,
-		top: y,
-		left: x
-		// left: 262
+		originY: 'center',
+		originX: 'center'
 	});
 
-	movementInfo.canvasObject = movement
+	var arrow = new fabric.Path({
+		originY: 'center',
+		originX: 'center'
+	})
 
-	console.log(movement);
+	var movement = new fabric.Group([circle, arrow], {
+		top: y,
+		left: x
+	});
+
+	movementInfo.canvasObject = movement;
+
 	canvas.add(movement);
 	canvas.renderAll();
 	// movementInfo.state = 'added';
 }
 
 function animateMovement(movementInfo) {
-	// movementInfo.canvasObject.animate('left', ''+(config.oneWPercent * 20), {
-	// 	// onChange: canvas.renderAll.bind(canvas),
-	// 	onChange: requestAnimationFrame(canvas.renderAll.bind(canvas), 100),
-	// 	// duration: config.currentMinInterval*16
-	// });
+	movementInfo.canvasObject.animate('left', ''+((config.oneWPercent * 20) + config.canvOpts.movements.strokeWidth*1.5), {
+		// onChange: canvas.renderAll.bind(canvas),
+		onChange: canvas.renderAll.bind(canvas),
+		duration: config.currentMinInterval*16
+	});
+}
 
-	animate(function(time){
-		movementInfo.canvasObject.setLeft( (time/config.currentMinInterval*16) + config.oneWPercent*20 );
-		canvas.renderAll.bind(canvas);
-	}, config.currentMinInterval*16);
+function showMovementResult(event) {
+	var status = event.detail.glStatus;
+	// if (status == 'success')
 }
 
 
 // Actions performed when current game settings recieved
 function onAgSetupEvent(event) {
 
-	let audioFileURL = 'http://' + window.location.hostname + '/songs/' + event.detail.song;
-	// let audioFileURL = '../audio/' + event.detail.song;
-
-	// console.log(audioFileURL);
+	// let audioFileURL = 'http://' + window.location.hostname + '/songs/' + event.detail.song;
+	let audioFileURL = '../songs/' + event.detail.song;
 
 	config.currentAudio = new Howl({
 		urls: [audioFileURL],
@@ -201,13 +203,12 @@ function onAgSetupEvent(event) {
 
 	// BPM, minInterval, beginning offset
 	// config.currentBpm = event.detail.bpm;
-	config.currentBpm = 128;
+	config.currentBpm = 120;
 	config.currentMinInterval = (config.currentBpm * 1000) / (60 * 16);
 	config.currentBeginningOffset = event.detail.offset;
 
-	// Test
-	// addMovementOnCanvas(config.currentMovements[1]);
-	start();
+	addMovementOnCanvas(config.currentMovements[4]);
+	animateMovement(config.currentMovements[4]);
 
 }
 
@@ -226,21 +227,16 @@ function nextBeat(isFirst) {
 	if (isFirst === true) {
 		addMovementOnCanvas(config.currentMovements[0]);
 		animateMovement(config.currentMovements[0]);
-		// setTimeout(nextBeat, config.currentMinInterval);
 		return;
 	}
 
 	// Insert new movement
 	var appearingMovementIndex = Math.floor((Date.now() - config.currentStartDate) / config.currentMinInterval);
-
-	console.log(appearingMovementIndex);
 	
 	var appearingMovement = config.currentMovements[appearingMovementIndex];
 
 	addMovementOnCanvas(appearingMovement);
 	animateMovement(appearingMovement);
-	// setTimeout(nextBeat, config.currentMinInterval);
-	console.log(appearingMovementIndex);
 
 }
 
@@ -292,8 +288,8 @@ var shadowCircle = new fabric.Circle({
 	// fill: config.colors.neutral,
 	fill: 'rgba(200,200,200,0.2)',
 	stroke: 'rgba(200,200,200,1)',
-	strokeWidth: config.canvOpts.movements.strokeWidth,
-	radius: config.canvOpts.movements.radius,
+	strokeWidth: config.canvOpts.movements.strokeWidth*2,
+	radius: config.canvOpts.movements.radius + config.canvOpts.movements.strokeWidth,
 	top: Math.round(config.oneHPercent*45),
 	left: config.oneWPercent * 20
 })

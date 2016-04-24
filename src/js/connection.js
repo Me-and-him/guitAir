@@ -14,7 +14,7 @@
     var host = "ws://" + window.location.hostname + "/";
     //var ws = new WebSocket(host);
     var songWasStarted = false;
-    var ws = io();
+    // var ws = io();
 
     function onOpen() {
 	// After we connect, the server sends us data which will be handled in
@@ -59,7 +59,7 @@
 	document.dispatchEvent(newEvent);
     }
 
-    io.on('message', onGotMessageOnStart);
+    // io.on('message', onGotMessageOnStart);
     // ws.onopen = onOpen;
     // ws.onclose = onClose;
     // ws.onmessage = onGotMessageOnStart;
