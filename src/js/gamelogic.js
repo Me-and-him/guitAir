@@ -10,93 +10,77 @@
 
     // Actions performed when current game settings recieved
     function onAgSetupEvent(event) {
-
+	console.log('agSetupEvent: ' + JSON.stringify(event.detail));
+	//
+    	config.movements = event.detail.commands;
+	//
 	let audioFileURL = 'http://' + window.location.hostname + '/songs/' + event.detail.song;
 	// let audioFileURL = '../audio/' + event.detail.song;
-
-	// console.log(audioFileURL);
-
-	config.currentAudio = new Howl({
+	console.log('audio file url: ' + audioFileURL);
+	config.audio = new Howl({
 	    urls: [audioFileURL],
 	    autoplay: false,
 	    volume: 0.8,
 	});
-
-	// config.currentMovements = event.detail.commands.map((currentValue, index, array) => {
-	//     return {
-	// 	index: index,
-	// 	name: currentValue,
-	// 	color: config.colors.neutral,
-	//     }
-	// });
-	config.currentMovements = event.detail.commands;
-
-	// BPM, minInterval, beginning offset
-	// config.currentBpm = event.detail.bpm;
-	config.currentBpm = 128;
-	config.currentMinInterval = (config.currentBpm * 1000) / (60 * 16);
-	config.currentBeginningOffset = event.detail.offset;
-
-	// Test
-	// addMovementOnCanvas(config.currentMovements[1]);
-	start();
-
-    }
-
-    function start() {
-	config.currentScore = 0;
-	config.currentStartDate = Date.now();
-	setTimeout(function(){
-	    nextBeat(true);
-	}, config.currentBeginningOffset);
-	config.currentAudio.start();
-    }
-
-    function nextBeat(isFirst) {
-
-	// If we're in the beginning of song
-	if (isFirst === true) {
-	    //addMovementOnCanvas(config.currentMovements[0]);
-	    //animateMovement(config.currentMovements[0]);
-	    config.currentIndex = 0;
-	    var newEvent = new CustomEvent('glAddMovement', {detail: config.currentMovements[config.currentIndex]});
-	    document.dispatchEvent(newEvent);
-	    setTimeout(nextBeat, config.currentMinInterval);
-	    return;
-	}
-
-	// Insert new movement
-	//var appearingMovementIndex = Math.floor((Date.now() - config.currentStartDate) / config.currentMinInterval);
-	console.log('apearing movement index: ' + appearingMovementIndex);
-	var appearingMovement = config.currentMovements[config.currentIndex];
-
-	var newEvent = new CustomEvent('glAddMovement', {detail: appearingMovement});
+	// Generate new event for the view.
+	var newEvent = new CustomEvent(
+	    'glSetupEvent',
+	    {detail: {song: event.song, bpm: event.bpm, commands: event.commands, music: config.audio}}
+	);
 	document.dispatchEvent(newEvent);
-	setTimeout(nextBeat, config.currentMinInterval);
-	console.log(appearingMovementIndex);
+	// BPM, minInterval, beginning offset
+	config.bpm = event.detail.bpm;
+	config.minInterval = (config.bpm * 1000) / (60 * 16);
+	config.beginningOffset = event.detail.offset;
+	// Start.
+	config.score = 0;
+	config.startDate = Date.now();
+	config.displayedIndex = 0;
+	config.lastReceivedIndex = 0;
+	function sendMovement() {
+	    var newEvent = new CustomEvent(
+		'glAddMovement',
+		{detail: config.movements[config.displayedIndex]}
+	    );
+	    console.log(newEvent);
+	    document.dispatchEvent(newEvent);
+	    setTimeout(sendMovement, config.minInterval);
+	}
+	setTimeout(sendMovement, config.beginningOffset);
+	config.audio.start();
     }
-
-    // function onAgSetupEvent(event) {
-    // 	config.movements = event.detail.commands;
-    // }
 
     function onAgCommandEvent(event) {
-	var time = Date.now();
+    	console.log('agCommandEvent: ' + JSON.stringify(event.detail));
+	// Count the time for the current movement.
+	var time = config.startDate + config.beginningOffset + config.minInterval * config.lastReceivedIndex;
+	// Count new score.
 	if (Math.abs(time - event.detail.time) < EPSILON) {
-	    var newEvent = new CustomEvent('glStatus', {detail: "success"});
+	    config.score += 100;
+	    var newEvent = new CustomEvent(
+		'glStatus',
+		{detail: {
+		    status: "success",
+		    index: config.lastReceivedIndex,
+		    newScore: config.score
+		}}
+	    );
 	    document.addEventListener(newEvent);
 	} else {
-	    var newEvent = new CustomEvent('glStatus', {detail: "fail"});
+	    config.score -= 10;
+	    var newEvent = new CustomEvent(
+		'glStatus',
+		{detail: {
+		    status: "fail",
+		    index: config.lastReceivedIndex,
+		    newScore: config.score
+		}}
+	    );
 	    document.addEventListener(newEvent);
 	}
+	config.lastReceivedIndex++;
     }
 
-    // document.addEventListener('agSetupEvent', onAgSetupEvent);
-    document.addEventListener('agSetupEvent', function(event) {
-    	console.log('agSetupEvent: ' + JSON.stringify(event.detail));
-    });
-    // document.addEventListener('agCommandEvent', onAgCommandEvent);
-    document.addEventListener('agCommandEvent', function(event) {
-    	console.log('agCommandEvent: ' + JSON.stringify(event.detail));
-    });
+    document.addEventListener('agSetupEvent', onAgSetupEvent);
+    document.addEventListener('agCommandEvent', onAgCommandEvent);
 })();
