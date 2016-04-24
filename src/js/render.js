@@ -177,68 +177,59 @@ function animateMovement(movementInfo) {
 
 function showMovementResult(event) {
 	var status = event.detail.glStatus;
-	// if (status == 'success')
+	var movementIndex = event.detail.index;
+	var canvObj = config.currentMovements[movementIndex].canvasObject;
+
+
+	// TEST
+
+	canvObj.setFill(config.colors[status]);
+	canvObj.animate('opacity', 0, {
+		onChange: canvas.renderAll.bind(canvas),
+		duration: 1000
+	});
+
 }
 
 
 // Actions performed when current game settings recieved
-function onAgSetupEvent(event) {
+function onGlAddMovement(event) {
 
-	// let audioFileURL = 'http://' + window.location.hostname + '/songs/' + event.detail.song;
-	let audioFileURL = '../songs/' + event.detail.song;
+	config.currentMovements.push({name: event.detail});
+	var thisMovement = config.currentMovements[length-1];
 
-	config.currentAudio = new Howl({
-		urls: [audioFileURL],
-		autoplay: false,
-		volume: 0.8,
-	});
-
-	config.currentMovements = event.detail.commands.map((currentValue, index, array) => {
-			return {
-				index: index,
-				name: currentValue,
-				color: config.colors.neutral,
-			}
-	});
-
-	// BPM, minInterval, beginning offset
-	// config.currentBpm = event.detail.bpm;
-	config.currentBpm = 120;
-	config.currentMinInterval = (config.currentBpm * 1000) / (60 * 16);
-	config.currentBeginningOffset = event.detail.offset;
-
-	addMovementOnCanvas(config.currentMovements[4]);
-	animateMovement(config.currentMovements[4]);
+	addMovementOnCanvas(thisMovement);
+	animateMovement(thisMovement);
 
 }
 
-function start() {
-	config.currentScore = 0;
-	config.currentStartDate = Date.now();
-	setTimeout(function(){
-		nextBeat(true);
-	}, config.currentBeginningOffset);
-	config.currentAudio.play();
-}
+// function start() {
+// 	config.currentScore = 0;
+// 	config.currentStartDate = Date.now();
+// 	setTimeout(function(){
+// 		nextBeat(true);
+// 	}, config.currentBeginningOffset);
+// 	config.currentAudio.play();
+// }
 
-function nextBeat(isFirst) {
+// function nextBeat(isFirst) {
 
-	// If we're in the beginning of song
-	if (isFirst === true) {
-		addMovementOnCanvas(config.currentMovements[0]);
-		animateMovement(config.currentMovements[0]);
-		return;
-	}
+// 	// If we're in the beginning of song
+// 	if (isFirst === true) {
+// 		addMovementOnCanvas(config.currentMovements[0]);
+// 		animateMovement(config.currentMovements[0]);
+// 		return;
+// 	}
 
-	// Insert new movement
-	var appearingMovementIndex = Math.floor((Date.now() - config.currentStartDate) / config.currentMinInterval);
+// 	// Insert new movement
+// 	var appearingMovementIndex = Math.floor((Date.now() - config.currentStartDate) / config.currentMinInterval);
 	
-	var appearingMovement = config.currentMovements[appearingMovementIndex];
+// 	var appearingMovement = config.currentMovements[appearingMovementIndex];
 
-	addMovementOnCanvas(appearingMovement);
-	animateMovement(appearingMovement);
+// 	addMovementOnCanvas(appearingMovement);
+// 	animateMovement(appearingMovement);
 
-}
+// }
 
 
 
@@ -296,7 +287,7 @@ var shadowCircle = new fabric.Circle({
 canvas.add(shadowCircle);
 
 // Set handler for game setup event
-document.addEventListener('agSetupEvent', onAgSetupEvent);
+document.addEventListener('GlAddMovement', onGlAddMovement);
 
 // Show current game code
 var codeContainer = document.getElementById('code-container');
