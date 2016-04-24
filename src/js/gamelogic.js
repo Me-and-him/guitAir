@@ -30,7 +30,7 @@
 	document.dispatchEvent(newEvent);
 	// BPM, minInterval, beginning offset
 	config.bpm = event.detail.bpm;
-	config.minInterval = 60000 * 4 / config.bpm;
+	config.minInterval = 60000 / config.bpm;
 	config.beginningOffset = event.detail.offset;
 	// Start.
 	config.score = 0;
@@ -42,11 +42,12 @@
 	    // Set deciding the status in the future.
 	    setTimeout(function() {
 		//var index = Math.round((config.lastPerformedAction.time - config.startDate - config.beginningOffset) / config.minInterval);
-		var index = config.displayedIndex - 1;
+		var index = config.displayedIndex - 4;
 		var valid = config.lastPerformedAction.movement == config.movements[index] &&
 		    Math.abs(config.lastPerformedAction.time - Date.now()) < config.minInterval / 2;
 		if (valid) {
 		    config.score += 100;
+		    console.log(index);
 		    var newEvent = new CustomEvent(
 			'glStatus',
 			{detail: {
@@ -69,23 +70,24 @@
 		    document.dispatchEvent(newEvent);
 		}
 		config.lastPerformedAction = 'pass';
-	    }, config.minInterval);
+	    }, config.minInterval*4);
 	    //
 	    var newEvent = new CustomEvent(
 		'glAddMovement',
 		{detail: config.movements[config.displayedIndex]}
 	    );
-	    console.log(newEvent);
+	    // console.log(newEvent);
 	    config.displayedIndex++;
 	    document.dispatchEvent(newEvent);
-	    setTimeout(sendMovement, config.minInterval);
+	    config.timer = setTimeout(sendMovement, config.minInterval);
 	}
 	setTimeout(sendMovement, config.beginningOffset);
 	config.audio.start();
     }
 
     function onAgCommandEvent(event) {
-	console.log('agCommandEvent: ' + JSON.stringify(event.detail));
+	// console.log('agCommandEvent: ' + JSON.stringify(event.detail));
+	if (event.detail.movement == 'stop') clearInterval(config.timer);
 	config.lastPerformedAction = event.detail;
     }
 

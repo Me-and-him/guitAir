@@ -206,13 +206,13 @@ function animateMovement(movementInfo) {
 
 	movementInfo.canvasObject.animate('left', ''+((config.oneWPercent * 20) + config.canvOpts.movements.strokeWidth*1.5), {
 		onChange: canvas.renderAll.bind(canvas),
-		duration: config.currentMinInterval
+		duration: config.currentMinInterval*4
 	});
 }
 
 function onGlSetupEvent(event) {
 	config.currentBpm = event.detail.bpm;
-	config.currentMinInterval = 60000*4 / config.currentBpm;
+	config.currentMinInterval = 60000 / config.currentBpm;
 	config.currentSongName = event.detail.song;
 	config.currentAudio = event.detail.music;
 	closePopup();

@@ -10,7 +10,7 @@
 
     var newEvent = new CustomEvent(
 	'agSetupEvent',
-	{detail: {song: '12 Home.mp3', bpm: 128, offset: 1000, commands: ['up', 'down', 'pass', 'up', 'down', 'pass']}}
+	{detail: {song: '12 Home.mp3', bpm: 128, offset: 1000, commands: ['up', 'down', 'pass', 'pass', 'up', 'down', 'pass', 'pass', 'stop']}}
     );
     document.dispatchEvent(newEvent);
     function sendMovement() {
