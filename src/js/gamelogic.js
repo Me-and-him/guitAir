@@ -38,6 +38,34 @@
 	config.displayedIndex = 0;
 	config.lastReceivedIndex = 0;
 	function sendMovement() {
+	    // Set deciding the status in the future.
+	    setTimeout(function() {
+		var index = Math.round((config.lastPerformedAction.time - config.startDate - config.beginningOffset) / config.minInterval);
+		if (config.lastPerformedAction == config.movements[supposedIndex]) {
+		    config.score += 100;
+		    var newEvent = new CustomEvent(
+			'glStatus',
+			{detail: {
+			    status: "success",
+			    index: index,
+			    newScore: config.score
+			}}
+		    );
+		    document.addEventListener(newEvent);
+		} else {
+		    config.score -= 10;
+		    var newEvent = new CustomEvent(
+			'glStatus',
+			{detail: {
+			    status: "fail",
+			    index: index,
+			    newScore: config.score
+			}}
+		    );
+		    document.addEventListener(newEvent);
+		}
+	    }, config.minInterval);
+	    //
 	    var newEvent = new CustomEvent(
 		'glAddMovement',
 		{detail: config.movements[config.displayedIndex]}
@@ -51,34 +79,8 @@
     }
 
     function onAgCommandEvent(event) {
-    	console.log('agCommandEvent: ' + JSON.stringify(event.detail));
-	// Count the time for the current movement.
-	var time = config.startDate + config.beginningOffset + config.minInterval * config.lastReceivedIndex;
-	// Count new score.
-	if (Math.abs(time - event.detail.time) < EPSILON) {
-	    config.score += 100;
-	    var newEvent = new CustomEvent(
-		'glStatus',
-		{detail: {
-		    status: "success",
-		    index: config.lastReceivedIndex,
-		    newScore: config.score
-		}}
-	    );
-	    document.dispatchEvent(newEvent);
-	} else {
-	    config.score -= 10;
-	    var newEvent = new CustomEvent(
-		'glStatus',
-		{detail: {
-		    status: "fail",
-		    index: config.lastReceivedIndex,
-		    newScore: config.score
-		}}
-	    );
-	    document.dispatchEvent(newEvent);
-	}
-	config.lastReceivedIndex++;
+	console.log('agCommandEvent: ' + JSON.stringify(event.detail));
+	config.lastPerformedAction = event.detail;
     }
 
     document.addEventListener('agSetupEvent', onAgSetupEvent);
