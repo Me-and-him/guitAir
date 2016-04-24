@@ -1,0 +1,21 @@
+<html>
+<head>
+  <script src="js/connection.js"> </script>
+  <script>
+    function printEcho(type, msg) {
+      var d = document.getElementById('text');
+      d.innerHTML += type + msg + '<br>';
+    }
+    document.addEventListener('agSetupEvent', function(event) {
+      printEcho('agSetupEvent', JSON.stringify(event.detail));
+    }
+    document.addEventListener('agCommandEvent', function(event) {
+      printEcho('agCommandEvent', JSON.stringify(event.detail));
+    }
+  </script>
+</head>
+<body>
+  <h1>TEXT</h1>
+  <div id="text"></div>
+</body>
+</html>
